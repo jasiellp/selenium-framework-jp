@@ -1,0 +1,42 @@
+9
+
+dir
+0
+https://github.com/jasiellp/selenium-jp.git/trunk/src/com/menu
+https://github.com/jasiellp/selenium-jp.git
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+63913db5-d125-872f-cf06-ce57b7db7bff
+
+MainMenu.java
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
