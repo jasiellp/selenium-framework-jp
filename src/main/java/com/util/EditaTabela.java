@@ -27,7 +27,8 @@ import com.inter.ISelenium;
 public class EditaTabela extends ISelenium {
 
 	private  DefaultTableModel model;
-
+	private  Editor editor;
+	
 	
 	public  DefaultTableModel setValorTabela(String caminho,String id, final boolean editable) {
  	
@@ -339,8 +340,10 @@ public class EditaTabela extends ISelenium {
 
 	}
 
-	public  void alterar(String caminho,String arquivo,String id, String nome,String NumCol,String list) {
+	public  void alterar(String caminho,String arquivo,String id, String nome,String NumCol,String list) throws IOException {
  
+		
+		this.editor = new Editor();
 		File arq = new File(new File(caminho), arquivo);
 		StringBuffer novo = new StringBuffer();
 		try {
@@ -384,10 +387,10 @@ public class EditaTabela extends ISelenium {
 
 				 printWriter.flush();
 		         printWriter.close();
-		         Editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
+		         editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
 	           }
 	           else{
-	        		Editor.setMensagemLabel(1,"Nome "+nome+" Já existe !!!");	
+	        	   editor.setMensagemLabel(1,"Nome "+nome+" Já existe !!!");	
 	           }
 				
 			} else
@@ -399,8 +402,8 @@ public class EditaTabela extends ISelenium {
 
 	}
 	
-	public  void alt(String caminho,String arquivo,String id, String nome,String NumCol) {
-		 
+	public  void alt(String caminho,String arquivo,String id, String nome,String NumCol) throws IOException {
+		this.editor = new Editor();
 		File arq = new File(new File(caminho), arquivo);
 		StringBuffer novo = new StringBuffer();
 		try {
@@ -444,10 +447,10 @@ public class EditaTabela extends ISelenium {
 
 				 printWriter.flush();
 		         printWriter.close();
-		         Editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
+		         editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
 	           }
 	           else{
-	        		Editor.setMensagemLabel(1,"Nome "+nome+" Já existe !!!");	
+	        		editor.setMensagemLabel(1,"Nome "+nome+" Já existe !!!");	
 	           }
 				
 			} else
@@ -459,8 +462,8 @@ public class EditaTabela extends ISelenium {
 
 	}
 	
-	public  void alterara(String caminho,String arquivo,String id, String nome,String NumCol,String list) {
-		  
+	public  void alterara(String caminho,String arquivo,String id, String nome,String NumCol,String list) throws IOException {
+		this.editor = new Editor();
 		File arq = new File(new File(caminho), arquivo);
 		StringBuffer novo = new StringBuffer();
 		try {
@@ -501,7 +504,7 @@ public class EditaTabela extends ISelenium {
 
 				 printWriter.flush();
 		         printWriter.close();
-		         Editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
+		         editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
 	           
 				
 			} else

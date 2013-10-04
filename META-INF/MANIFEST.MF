@@ -13,7 +13,7 @@ Export-Package: com.core,
  com.selenium,
  com.server,
  com.t,
- com.tableUtil,
+ com.util.table,
  com.util,
  com.variavel,
  teste_jp.automacao

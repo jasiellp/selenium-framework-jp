@@ -33,18 +33,18 @@ public class Editor extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private static JTextField textField;
-
+	private Main main = new Main();
 	private JButton cancelButton;
-	private static JButton btnExcluir;
+	private  JButton btnExcluir;
 	private JButton btnNewButton;
 	private JButton  button_1; 
-	private static JLabel lblNewLabel;
-	private static JLabel lblNewLabel_1;
-	private static String ARQUIVO;
-	private static String CAMINHO;
-	private static String ARQUIVO2;
-	private static String CAMINHO2;
-	private static String NUMCOL;
+	private JLabel lblNewLabel;
+	private JLabel lblNewLabel_1;
+	private String ARQUIVO;
+	private String CAMINHO;
+	private String ARQUIVO2;
+	private String CAMINHO2;
+	private String NUMCOL;
 	private JButton button;
 	private static Editor dialog;
 	private JPanel panel_1;
@@ -109,7 +109,7 @@ public class Editor extends JDialog {
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 				dispose();
-				Main.setNome(null);
+				main.setNome(null);
 				}
 			});
 			cancelButton.setBackground(Color.WHITE);
@@ -132,7 +132,7 @@ public class Editor extends JDialog {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
-				if(Main.getEvento() == 1){
+				if(main.getEvento() == 1){
 					
 					if(setLista(model) == 0)
 						setMensagemLabel(1,"Selecione um Item");
@@ -141,7 +141,7 @@ public class Editor extends JDialog {
 						setMensagemLabel(1,"Digite o Nome");
 					else{
 					
-						Main.setNome(textField.getText()); 
+						main.setNome(textField.getText()); 
 						selectionValues = list.getSelectedValues();
 					 	dispose();
 					}  }
@@ -150,12 +150,27 @@ public class Editor extends JDialog {
 					setLista(model);
 				
 					if(nomeVlr.equals(textField.getText())){
-						edTabela.alterara(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL,getLista());
+						try {
+							edTabela.alterara(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL,getLista());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}else{
 						if(Variaveis.getEvento() == 2)
-							edTabela.alt(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL);
+							try {
+								edTabela.alt(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						else
-							edTabela.alterar(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL,getLista());
+							try {
+								edTabela.alterar(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL,getLista());
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 					}
 				}
 			}
@@ -313,57 +328,57 @@ public class Editor extends JDialog {
 		contentPanel.setLayout(gl_contentPanel);
 	}
 	
-	public static void setMensagemLabel(int tipo,String mensagem){
+	public   void setMensagemLabel(int tipo,String mensagem){
 		
 		if(tipo == 1)
-		lblNewLabel_1.setForeground(Color.RED);
+			this.lblNewLabel_1.setForeground(Color.RED);
 		if(tipo == 0)
-		lblNewLabel_1.setForeground(Color.BLACK);
+			this.lblNewLabel_1.setForeground(Color.BLACK);
 		if(tipo == 2)
-			lblNewLabel_1.setForeground(Color.GREEN);
+			this.lblNewLabel_1.setForeground(Color.GREEN);
 		
-		lblNewLabel_1.setText(mensagem);
+		this.lblNewLabel_1.setText(mensagem);
 		
 	}
 
 
-	public static void setID(String id){
-		lblNewLabel.setText( "ID : "+id);
+	public   void setID(String id){
+		this.lblNewLabel.setText( "ID : "+id);
 	}
 	
-	public static void setNome(String nome){
-		textField.setText(nome);
-		nomeVlr=nome;
+	public   void setNome(String nome){
+		this.textField.setText(nome);
+		this.nomeVlr=nome;
 	}
 	
-	public static void setCaminho(String caminho){
-		CAMINHO = caminho;
+	public   void setCaminho(String caminho){
+		this.CAMINHO = caminho;
 	}
 	
-	public static void setArquivo(String arquivo){
-		ARQUIVO = arquivo;
+	public   void setArquivo(String arquivo){
+		this.ARQUIVO = arquivo;
 	}
 	
-	public static void setCaminho2(String caminho){
-		CAMINHO2 = caminho;
+	public   void setCaminho2(String caminho){
+		this.CAMINHO2 = caminho;
 	}
 	
-	public static void setArquivo2(String arquivo){
-		ARQUIVO2 = arquivo;
+	public   void setArquivo2(String arquivo){
+		this.ARQUIVO2 = arquivo;
 	}
 	
-	public static void setNumCol(String numCol){
-		NUMCOL = numCol;
+	public   void setNumCol(String numCol){
+		this.NUMCOL = numCol;
 	}
 
 	public  void setVisivel(boolean numCol){
-		btnExcluir.setVisible(numCol);
+		this.btnExcluir.setVisible(numCol);
 	}
 	public  void setVisivelList(boolean numCol){
-		scrollPane.setVisible(numCol);
-		scrollPane_1.setVisible(numCol);
-		button_1.setVisible(numCol);
-		button.setVisible(numCol);
+		this.scrollPane.setVisible(numCol);
+		this.scrollPane_1.setVisible(numCol);
+		this.button_1.setVisible(numCol);
+		this.button.setVisible(numCol);
 	}
  
 	

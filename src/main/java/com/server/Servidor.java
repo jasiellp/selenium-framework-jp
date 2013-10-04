@@ -115,7 +115,12 @@ public class Servidor extends JDialog {
 	    btnNewButton = new JButton("");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) { 
-				edTabela.alt(CAMINHO,ARQUIVO,text_nome.getText() ,textField.getText(),"1");
+				try {
+					edTabela.alt(CAMINHO,ARQUIVO,text_nome.getText() ,textField.getText(),"1");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		btnNewButton.setIcon(new ImageIcon(Servidor.class.getResource("/com/image/ok.png")));
