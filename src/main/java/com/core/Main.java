@@ -38,7 +38,7 @@ import com.util.table.JTableX;
  *  
  *  Classe revisada, com implementação de Interface e propriedades.
  * FAZE 001 - OK -- (Padronização das interfaces)
- * 
+ * FAZE 002 - OK -- (Limpeza e padronização do Layout)
  * */
 
 
@@ -53,17 +53,18 @@ public class Main extends JDialog implements IFrame  {
 	private EditaTabela edTabela = new EditaTabela();
 	
 	private EditaArquivo edArquivo = new EditaArquivo();
-	 
+	   
+	private Main frame;
 	
-	private static String[] vtor;
+	private String[] vtor;
  	
-	public static void main(String[] args) {
+	public final void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main frame = new Main();
+					frame = new Main();
 					frame.setVisible(true);
-					frame.setTitle("FRAME");
+					frame.setTitle(propriedades.leitor("tdialog001"));
 					frame.setResizable(true);
 				 	frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					 
@@ -99,7 +100,7 @@ public class Main extends JDialog implements IFrame  {
 	private JButton btnAdd_1;
 	private JButton btnDelete_1;
 	private GroupLayout gl_panel_3;
-	
+	private MainExtencaoLayout mExt;
 	
  
 	public Main() {
@@ -107,6 +108,9 @@ public class Main extends JDialog implements IFrame  {
 		this.setModal(true);
 	 	this.setIconImage(new  ImageIcon((propriedades.leitor("iconeprincipal"))).getImage());
 		this.setBounds(100, 100, 745, 664);
+		
+		this.mExt = new MainExtencaoLayout();
+		
 		this.contentPane = new JPanel();
 		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setContentPane(contentPane);
@@ -130,70 +134,35 @@ public class Main extends JDialog implements IFrame  {
 		
 		this.btnAdd_1 = new JButton(new ImageIcon((propriedades.leitor("iconeadd"))));
 		this.btnAdd_1.setBackground(Color.WHITE);
-		
+		 
+	    this.btnRenomear = new JButton(new ImageIcon((propriedades.leitor("iconesalve"))));
+	    this.btnRenomear.setBackground(Color.WHITE);
 		
 		this.model = new DefaultTableModel(); 
+		this.model = edTabela.indice(INDICE);
+		
 		this.model_1 = edTabela.setValorTabela(TABELA,NULO,true);
 		 
 		this.table_1 = new JTableX(model_1);
 		this.table_1.setRowHeight(20);
-		this.model = edTabela.indice(INDICE);
-		
+		 
 		this.table = new JTable(model); 
+		this.table.setShowHorizontalLines(false);
+		this.table.setDefaultEditor(Object.class, null);
+		
 		this.edTabela.ocultaColuna(table, 1);
 		this.edTabela.ocultaColuna(table, 2);
+		 
+		this.scrollPane = new JScrollPane(table);
+		
 		this.scrollPane_1 = new JScrollPane(table_1);
 		
-		
 		this.panel.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		
-		this.gl_contentPane = new GroupLayout(contentPane);
-		this.gl_contentPane.setHorizontalGroup(
-				this.gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(this.gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(this.panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		this.gl_contentPane.setVerticalGroup(
-				this.gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(this.gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 594, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		
-	    
 		this.panel_1.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	    this.panel_2.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	    this.panel_3.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	    
-	    this.gl_panel = new GroupLayout(panel);
-	    this.gl_panel.setHorizontalGroup(
-	    		this.gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(this.gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(this.panel_3, GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(this.gl_panel.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(panel_1, Alignment.TRAILING, 0, 0, Short.MAX_VALUE)
-						.addComponent(panel_2, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-	    this.gl_panel.setVerticalGroup(
-	    		this.gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(this.gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(this.gl_panel.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(this.panel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(this.panel_3, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(this.panel_1, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(21, Short.MAX_VALUE))
-		);
-		
-	    this.btnRenomear = new JButton(new ImageIcon((propriedades.leitor("iconesalve"))));
-	    this.btnRenomear.setBackground(Color.WHITE);
+	 
 	    
 	    this.btnRenomear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -221,93 +190,28 @@ public class Main extends JDialog implements IFrame  {
 				
 			}
 		});
-		
+	      
+		this.gl_contentPane = mExt.parte1(contentPane, panel);
+		  
+	    this.gl_panel = mExt.part2(panel, panel_1, panel_2, panel_3);
+	      
+		this.gl_panel_1 = mExt.parte3(panel_1, btnSair);
 	
-		this.gl_panel_3 = new GroupLayout(panel_3);
-		this.gl_panel_3.setHorizontalGroup(
-				this.gl_panel_3.createParallelGroup(Alignment.LEADING)
-				.addGroup(this.gl_panel_3.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(this.gl_panel_3.createParallelGroup(Alignment.LEADING)
-						.addComponent(this.scrollPane_1, GroupLayout.DEFAULT_SIZE, 506, Short.MAX_VALUE)
-						.addGroup(this.gl_panel_3.createSequentialGroup()
-							.addComponent(this.btnAdd_1, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-							.addGap(29)
-							.addComponent(this.btnDelete_1, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-							.addGap(35)
-							.addComponent(this.btnRenomear, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
-		);
-		this.gl_panel_3.setVerticalGroup(
-				this.gl_panel_3.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, this.gl_panel_3.createSequentialGroup()
-					.addGap(12)
-					.addComponent(this.scrollPane_1, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-					.addGap(18)
-					.addGroup(this.gl_panel_3.createParallelGroup(Alignment.LEADING)
-						.addGroup(this.gl_panel_3.createParallelGroup(Alignment.BASELINE)
-							.addComponent(this.btnAdd_1, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-							.addComponent(this.btnDelete_1, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE))
-						.addComponent(this.btnRenomear, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
+		this.gl_panel_3 = mExt.parte4(panel_3, scrollPane_1, btnAdd_1, btnDelete_1, btnRenomear);
 		
-		this.panel_3.setLayout(this.gl_panel_3);
-	  
-		this.gl_panel_1 = new GroupLayout(this.panel_1);
-		this.gl_panel_1.setHorizontalGroup(
-				this.gl_panel_1.createParallelGroup(Alignment.LEADING)
-	    		.addGroup(Alignment.TRAILING, this.gl_panel_1.createSequentialGroup()
-	    			.addContainerGap(31, Short.MAX_VALUE)
-	    			.addComponent(this.btnSair, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-	    			.addGap(28))
-	    );
-		this.gl_panel_1.setVerticalGroup(
-				this.gl_panel_1.createParallelGroup(Alignment.LEADING)
-	    		.addGroup(this.gl_panel_1.createSequentialGroup()
-	    			.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 54, Short.MAX_VALUE)
-	    			.addGap(1))
-	    );
+		this.gl_panel_2 =  mExt.parte5(panel_2, scrollPane, btnAdd, btnDelete, btnRenomear);
 		
-	  
-		
-		this.table.setShowHorizontalLines(false);
-		this.scrollPane = new JScrollPane(this.table);
-	     
-		this.panel_1.setLayout(this.gl_panel_1);
-	  
-		
-		this.gl_panel_2 = new GroupLayout(this.panel_2);
-		this.gl_panel_2.setHorizontalGroup(
-				this.gl_panel_2.createParallelGroup(Alignment.LEADING)
-	    		.addGroup(this.gl_panel_2.createSequentialGroup()
-	    			.addGap(34)
-	    			.addGroup(this.gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-	    				.addComponent(this.btnDelete, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-	    				.addComponent(this.btnAdd, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 58, Short.MAX_VALUE))
-	    			.addGap(24))
-	    		.addGroup(this.gl_panel_2.createSequentialGroup()
-	    			.addContainerGap()
-	    			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
-	    			.addContainerGap())
-	    );
-		this.gl_panel_2.setVerticalGroup(
-				this.gl_panel_2.createParallelGroup(Alignment.TRAILING)
-	    		.addGroup(this.gl_panel_2.createSequentialGroup()
-	    			.addContainerGap()
-	    			.addComponent(this.scrollPane, GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
-	    			.addGap(18)
-	    			.addComponent(this.btnDelete, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-	    			.addGap(18)
-	    			.addComponent(this.btnAdd, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-	    			.addContainerGap())
-	    );
-		this.panel_2.setLayout(this.gl_panel_2);
-		this.panel.setLayout(this.gl_panel);
+		   
 		this.contentPane.setLayout(this.gl_contentPane);
 		
+		this.panel.setLayout(this.gl_panel);
+		
+		this.panel_1.setLayout(this.gl_panel_1);
+	  
+		this.panel_2.setLayout(this.gl_panel_2);
+		
+		this.panel_3.setLayout(this.gl_panel_3);
 		  
-		this.table.setDefaultEditor(Object.class, null);    
 		this.table.addMouseListener(new MouseAdapter() {  
 		 
 			public void mouseClicked(MouseEvent e)  
@@ -352,9 +256,7 @@ public class Main extends JDialog implements IFrame  {
 			}
 		}); 
 		  
-		
-		  
-		btnDelete.addActionListener(new ActionListener() {
+		this.btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0){
 
 				id = table.getSelectedRow();
@@ -400,9 +302,8 @@ public class Main extends JDialog implements IFrame  {
 
 			}
 		});
-
-		
-		btnAdd.addActionListener(new ActionListener() {
+ 
+		this.btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {  
 					setEvento(1);
@@ -440,14 +341,14 @@ public class Main extends JDialog implements IFrame  {
 			}
 		});
 		
-	    btnSair.addActionListener(new ActionListener() {
+	    this.btnSair.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		
 	    		dispose();
 	    	}
 	    });
 	    
-		btnAdd_1.addActionListener(new ActionListener() {
+		this.btnAdd_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				 
 				id = table.getSelectedRow();
@@ -463,20 +364,19 @@ public class Main extends JDialog implements IFrame  {
 			}
 		});
 	
-		btnDelete_1.addActionListener(new ActionListener() {
+		this.btnDelete_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				removeSelectedFromTable(table_1);
 			}
 		});
 				
 	}
-	
- 
-	public   String getNomeTabelas(){
+	 
+	public String getNomeTabelas(){
 	 	return this.table.getModel().getValueAt(this.table.getSelectedRow(), 0).toString();
 	}
 	
-	public   String getIDTabelas(){
+	public String getIDTabelas(){
 	 	return this.table.getModel().getValueAt(this.table.getSelectedRow(), 1).toString();
 	}
 	
@@ -495,7 +395,7 @@ public class Main extends JDialog implements IFrame  {
 		return novonome;
 	}
 	
-	public static void setVetor(String nome) throws IOException {
+	public void setVetor(String nome) throws IOException {
 
 		String stg = nome.replace(SEPARE1, NULO);
 		
@@ -506,11 +406,11 @@ public class Main extends JDialog implements IFrame  {
 
 	}
 	
-	public static String[] getVetor() {
+	public String[] getVetor() {
 		return vtor ;
 	}
 	
-	public  void setNome(String novonome ){
+	public void setNome(String novonome ){
 		this.novonome = novonome ;
 	}
 	 
@@ -518,7 +418,7 @@ public class Main extends JDialog implements IFrame  {
 		this.ev = ev;
 	}
 	
-	public  int getEvento(){
+	public int getEvento(){
 		return this.ev;
 	}
 

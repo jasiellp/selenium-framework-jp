@@ -249,11 +249,11 @@ public class Editor extends JDialog {
 		model_2.addElement(list_j[i]);
 		 
 		
-		if(Main.getVetor() != null){
-			System.out.println(Main.getVetor().length);	
-			for(int i = 0; i < Main.getVetor().length ; i++){
-			model.addElement(Main.getVetor()[i]);
-			model_2.removeElement(Main.getVetor()[i]);
+		if(main.getVetor() != null){
+			System.out.println(main.getVetor().length);	
+			for(int i = 0; i < main.getVetor().length ; i++){
+			model.addElement(main.getVetor()[i]);
+			model_2.removeElement(main.getVetor()[i]);
 			}
 		}
 		
