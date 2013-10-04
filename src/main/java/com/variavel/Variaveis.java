@@ -396,7 +396,7 @@ public class Variaveis extends JDialog  {
 					
 				
 					}else{
-						if (edTabela.existe(nome,TABELA,"IVariavel.deb")) {
+						if (edTabela.existe(nome,VARIAVEL)) {
 							
 							model.addRow(new Object[] { nome,"",numCol});
 							edArquivo.Grava(VARIAVEL, table);

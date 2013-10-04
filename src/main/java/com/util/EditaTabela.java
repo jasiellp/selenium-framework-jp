@@ -22,9 +22,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import com.core.panel.Editor;
+import com.inter.IFrame;
 import com.inter.ISelenium;
 
-public class EditaTabela extends ISelenium {
+public class EditaTabela extends ISelenium implements IFrame  {
 
 	private  DefaultTableModel model;
 	private  Editor editor;
@@ -360,34 +361,98 @@ public class EditaTabela extends ISelenium {
 
 				while ((linha = bufferedReader.readLine()) != null){
 					lista.add(linha);
-				if(linha.split(Pattern.quote(SEPARADOR))[0].equals(nome))
-					test = false;
+				 
 				}
 				bufferedReader.close();
 				  
-				
-	           if(test){
+			 
 	        	   PrintWriter printWriter = new PrintWriter(new FileWriter(arq, false));
 	            for (int i = 0; i < lista.size(); i++) {
 	            	
 					linha1 = lista.get(i);
 				  	
-					if (linha1.split(Pattern.quote(SEPARADOR))[1].equals(id)){
+					if (linha1.split(Pattern.quote(SEPARADOR))[1].equals(id))
+					{
 						novo.append(nome).append(SEPARADOR).append(id).append(SEPARADOR).append(list).append("\n");
 						 
 						printWriter.print(novo.toString());
 						  
-						if(new File(caminho+"User_"+linha1.split(Pattern.quote(SEPARADOR))[0]+".deb").exists()){
+						if(new File(caminho+"User_"+linha1.split(Pattern.quote(SEPARADOR))[0]+".deb").exists())
 							copyFile(new File(caminho+"User_"+linha1.split(Pattern.quote(SEPARADOR))[0]+".deb"), new File(caminho+"User_"+nome+".deb"));
-						}
 						
-					} else
+						
+					} 
+					else
 						printWriter.print(linha1+"\n");
 				}
 
 				 printWriter.flush();
 		         printWriter.close();
 		         editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
+	            
+				
+			} else
+				new FileWriter(arq, true).close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	public  void criar(String caminho,String indice , String nome, String itemlista) throws IOException {
+  
+		editor = new Editor();
+		
+		File arq = new File(new File(caminho), indice);
+		
+		StringBuffer novo = new StringBuffer();
+		
+		
+		
+		try {
+			if (arq.exists()) {
+				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
+				
+
+				String linha = "";
+				String linha1 = "";
+				boolean itemRepetido = true;
+				
+				
+				ArrayList<String> lista = new ArrayList<String>();
+
+				while ((linha = bufferedReader.readLine()) != null){
+					
+					lista.add(linha);
+				
+					if(linha.split(Pattern.quote(SEPARADOR))[0].equals(nome))
+						itemRepetido = false;
+				}
+				
+				bufferedReader.close();
+				  
+				
+	           if(itemRepetido){
+	        	   
+	        	   PrintWriter printWriter = new PrintWriter(new FileWriter(arq, false));
+	            
+	        	   for (int i = 0; i < lista.size(); i++) 
+				  	   printWriter.print(lista.get(i)+"\n");
+				
+	        	 
+	        	 novo.append(nome).append(SEPARE2);
+	       	     novo.append((lista.size()+1));
+	       		 novo.append(SEPARE2).append(itemlista).append(" \n");
+	        
+	       		 printWriter.print(novo.toString());
+				 
+	       		 printWriter.flush();
+		         
+	       		 printWriter.close();
+		          
+	       		 editor.setMensagemLabel(2,nome+" Criado Com sucesso");	
 	           }
 	           else{
 	        	   editor.setMensagemLabel(1,"Nome "+nome+" Já existe !!!");	
@@ -401,6 +466,7 @@ public class EditaTabela extends ISelenium {
 		}
 
 	}
+	
 	
 	public  void alt(String caminho,String arquivo,String id, String nome,String NumCol) throws IOException {
 		this.editor = new Editor();
@@ -466,8 +532,9 @@ public class EditaTabela extends ISelenium {
 		this.editor = new Editor();
 		File arq = new File(new File(caminho), arquivo);
 		StringBuffer novo = new StringBuffer();
+		
 		try {
-			 System.out.println("list -->> "+list);
+			 
 			if (arq.exists()) {
 				
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
@@ -491,7 +558,7 @@ public class EditaTabela extends ISelenium {
 				for (int i = 0; i < lista.size(); i++) {
 	            	
 					linha1 = lista.get(i);
-				  	System.out.println(linha1.split(Pattern.quote(SEPARADOR))[i]+" NOME->"+nome);
+				   
 				  	
 					if (linha1.split(Pattern.quote(SEPARADOR))[i].equals(nome)){
 						novo.append(nome).append(SEPARADOR).append(id).append(SEPARADOR).append(list).append("\n");
@@ -536,9 +603,9 @@ public class EditaTabela extends ISelenium {
        }
    }
 
-	public  boolean existe(String nome,String caminho, String arquivo) throws IOException {
+	public  boolean existe(String nome, String arquivo) throws IOException {
 
-		File arq = new File(new File(caminho), arquivo);
+		File arq = new File(arquivo);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 
 		String linha = "";

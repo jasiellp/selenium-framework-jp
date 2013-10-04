@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -23,11 +25,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import com.core.Main;
+import com.inter.IFrame;
 import com.util.EditaArquivo;
 import com.util.EditaTabela;
 import com.variavel.Variaveis;
 
-public class Editor extends JDialog {
+public class Editor extends JDialog implements IFrame  {
 
 	 
 	private static final long serialVersionUID = 1L;
@@ -35,7 +38,7 @@ public class Editor extends JDialog {
 	private static JTextField textField;
 	private Main main = new Main();
 	private JButton cancelButton;
-	private  JButton btnExcluir;
+	private JButton btnExcluir;
 	private JButton btnNewButton;
 	private JButton  button_1; 
 	private JLabel lblNewLabel;
@@ -65,6 +68,9 @@ public class Editor extends JDialog {
 	private EditaTabela edTabela = new EditaTabela();
 	private EditaArquivo edArquivo = new EditaArquivo();
 	private String[] list_j =  edTabela.getTab("properties\\value\\Variavel\\", "IVariavel.deb", 0 );
+	private int evento;
+	private String[] vtor;
+	private Object[] indice;
 	
 	private DefaultListModel model;
 	private DefaultListModel model_2;
@@ -126,52 +132,85 @@ public class Editor extends JDialog {
 	    		dispose();
 	    	}
 	    });
-		btnExcluir.setIcon(new ImageIcon(Editor.class.getResource("/com/image/lixeira.png")));
+	
+	    btnExcluir.setIcon(new ImageIcon(Editor.class.getResource("/com/image/lixeira.png")));
 		
 	    btnNewButton = new JButton("");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
-				if(main.getEvento() == 1){
+				try {
+					 
+					setLista(model);
+			 
+					if(getEvento() == 10)
+					{
+						edTabela.criar(CAMINHO, ARQUIVO, textField.getText(), getLista());
+						dispose();
+					}
+					
+					if(getEvento() == 1)
+					{
+					    
+						if(igualNome(textField.getText()))
+						{
+						edTabela.alterar(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL, getLista());
+						main.setNome(textField.getText()); 
+					    selectionValues = list.getSelectedValues();
+						dispose();
+					
+						}
+						else
+						{
+							setMensagemLabel(1,"Nome Ja existe");
+						}
+					}
+					
+					
+					
+				 
+				/*
+				if(getEvento() == 1){
 					
 					if(setLista(model) == 0)
-						setMensagemLabel(1,"Selecione um Item");
-					else{ 
+					 	setMensagemLabel(1,"Selecione um Item");
+					 
 					if(textField.getText() == null || textField.getText().trim().equals(""))
 						setMensagemLabel(1,"Digite o Nome");
-					else{
-					
+					else 
+					{
 						main.setNome(textField.getText()); 
 						selectionValues = list.getSelectedValues();
 					 	dispose();
-					}  }
+					}
+					
+					
 				}else{
+					
 					setMensagemLabel(0,"");
+					
 					setLista(model);
 				
-					if(nomeVlr.equals(textField.getText())){
-						try {
-							edTabela.alterara(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL,getLista());
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}else{
+					if(nomeVlr.equals(textField.getText()))
+					    
+					
+					else
+					{
 						if(Variaveis.getEvento() == 2)
-							try {
 								edTabela.alt(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						else
-							try {
+							
+						else 
 								edTabela.alterar(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL,getLista());
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							 
 					}
+				}*/
+				
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}finally{
+					vtor = null;
+				
 				}
 			}
 		});
@@ -247,16 +286,7 @@ public class Editor extends JDialog {
 		
 		for(int i = 0; i < list_j.length ; i++)
 		model_2.addElement(list_j[i]);
-		 
-		
-		if(main.getVetor() != null){
-			System.out.println(main.getVetor().length);	
-			for(int i = 0; i < main.getVetor().length ; i++){
-			model.addElement(main.getVetor()[i]);
-			model_2.removeElement(main.getVetor()[i]);
-			}
-		}
-		
+		  
 		
 		list = new JList(model_2);
 		scrollPane = new JScrollPane(list);
@@ -328,7 +358,7 @@ public class Editor extends JDialog {
 		contentPanel.setLayout(gl_contentPanel);
 	}
 	
-	public   void setMensagemLabel(int tipo,String mensagem){
+	public void setMensagemLabel(int tipo,String mensagem){
 		
 		if(tipo == 1)
 			this.lblNewLabel_1.setForeground(Color.RED);
@@ -342,11 +372,11 @@ public class Editor extends JDialog {
 	}
 
 
-	public   void setID(String id){
+	public void setID(String id){
 		this.lblNewLabel.setText( "ID : "+id);
 	}
 	
-	public   void setNome(String nome){
+	public void setNome(String nome){
 		this.textField.setText(nome);
 		this.nomeVlr=nome;
 	}
@@ -381,13 +411,41 @@ public class Editor extends JDialog {
 		this.button.setVisible(numCol);
 	}
  
+	public void setEvento(int evento){
+		this.evento = evento;
+	}
 	
-	public int setLista(DefaultListModel jp){ 
-	 
-	 
+	
+	public void setIgualNome(Object[] indice){
+		this.indice = indice;
+	}
+
+	public boolean igualNome(String nome) {
+		boolean status = true;
+		
+		for (int i = 0; i < indice.length; i++) {
+		
+			if (indice[i].toString().equals(nome)) {
+				status = false;
+				break;
+			}
+
+		}
+		return status;
+
+	}
+	
+	public int getEvento(){
+	 	return this.evento;
+	}
+	
+	public int setLista(DefaultListModel<?> jp){ 
+	  
 		for(int i = 0; i < jp.size() ; i++)
-			vlor = vlor+jp.get(i)+"|||";
-		 
+		{
+			if(!jp.get(i).toString().trim().equals(""))
+				vlor = vlor+jp.get(i)+SEPARE0;
+		}
 		return jp.size();
 	}
 	
@@ -400,5 +458,32 @@ public class Editor extends JDialog {
 		return textField.getName();
 	}
 	
+	
+	public void setVetor(String nome) throws IOException {
+
+		String stg = nome.replace(SEPARE1, NULO);
+		
+		if (stg.split(Pattern.quote(SEPARE0)).length > 0){
+			this.vtor = stg.split(Pattern.quote(SEPARE0));
+		
+			if(getVetor() != null){
+				
+				for(int i = 0; i < getVetor().length ; i++){
+					model.addElement(getVetor()[i]);
+					model_2.removeElement(getVetor()[i]);
+				
+				}
+			}
+		}else
+			this.vtor = null;
+
+		
+	
+	}
+	
+	
+	public String[] getVetor() {
+		return this.vtor ;
+	}
 	
 }

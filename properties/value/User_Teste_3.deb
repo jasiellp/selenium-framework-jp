@@ -1,9 +1,0 @@
-Abra o Link|@|Java2s_-->Link|@|11000
-Aguarde|@|java2s-->Link|@|3000
-Digite|@|java2s-->Campo_Pesquisa|@|JTable
-Capturar a tela|@|Java2s_-->IMG|@|null
-Aguarde|@|java2s-->Botao_Pesquisa|@|3000
-Clique|@|Java2s_-->Link_Database|@|null
-Capturar a tela|@|Java2s_-->IMG|@|null
-Texto Presente ?|@|Java2s_-->Texto|@|null
-Sair|@|Java2s_-->Link|@|null

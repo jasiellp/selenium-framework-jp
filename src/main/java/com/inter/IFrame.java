@@ -17,6 +17,8 @@ public interface IFrame {
 	
 	public final String SEPARE1  =  propriedades.leitor("separe001");
 	
+	public final String SEPARE2  =  propriedades.leitor("separe002");
+	
 	public final String VARIAVEL = propriedades.leitor("variavel");		
 	
 	public final String INDICE =  propriedades.leitor("indice");	

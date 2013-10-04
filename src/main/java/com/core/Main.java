@@ -41,9 +41,7 @@ import com.util.table.JTableX;
 
 
 public class Main extends JDialog implements IFrame  {
-
-	private int ev = 0;
-	
+ 
 	private static final long serialVersionUID = 1L;
  
 	private Propriedades propriedades = new Propriedades (ARQUIVO);
@@ -52,17 +50,17 @@ public class Main extends JDialog implements IFrame  {
 	
 	private EditaArquivo edArquivo = new EditaArquivo();
 	   
-	private Main frame;
-	
-	private String[] vtor;
+	private static Main frame;
+ 
  	
-	public final void main(String[] args) {
+	 
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					frame = new Main();
 					frame.setVisible(true);
-					frame.setTitle(propriedades.leitor("tdialog001"));
+					frame.setTitle("");
 					frame.setResizable(true);
 				 	frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					 
@@ -266,26 +264,38 @@ public class Main extends JDialog implements IFrame  {
 						    JOptionPane.ERROR_MESSAGE);
 				} else { 
 					
-					  try {
+					try {
+					
 					table.setModel(model);
-					String nome = table.getModel().getValueAt(table.getSelectedRow(), 2).toString(); 
-				    
-					setVetor(nome); 
 					
-				    Editor  edt = new Editor();
-				
-					edt.setLocationRelativeTo(null);
+				    String nome = table.getModel().getValueAt(table.getSelectedRow(), 2).toString();
+				    String nome1 =table.getModel().getValueAt(table.getSelectedRow(), 0).toString();
+				 
+					int cot = edTabela.indice(INDICE).getRowCount();
+					Object[] indice = new Object[cot];
+					 
+			
+					for (int i = 0; i < cot; i++)
+					{
+						if(!edTabela.indice(INDICE).getValueAt(i, 0).equals(nome1))
+							indice[i] = edTabela.indice(INDICE).getValueAt(i, 0);
+						else
+							indice[i] = "";
+					} 
+				  
+				    Editor edt = new Editor();
+				    edt.setVetor(nome);
+				    edt.setEvento(1);
+				    edt.setIgualNome(indice);
+				    edt.setLocationRelativeTo(null);
 					edt.setTitle(propriedades.leitor("tmodal001"));
-					
-				 	
 					edt.setNumCol(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
 					edt.setCaminho(TABELA);
 					edt.setArquivo(propriedades.leitor("arquivoindice"));
 					edt.setID(getIDTabelas());
 					edt.setNome(getNomeTabelas());
 					edt.setVisible(true); 
-					edt.setCaminho2(null);
-					edt.setArquivo2(null);
+				
 					model = edTabela.indice(INDICE);
 					table.setModel(model);
 					edTabela.ocultaColuna(table, 1);
@@ -293,9 +303,7 @@ public class Main extends JDialog implements IFrame  {
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}finally{
-							vtor = null;
-						}
+						} 
 				}
 
 			}
@@ -304,44 +312,44 @@ public class Main extends JDialog implements IFrame  {
 		this.btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {  
-					setEvento(1);
 					
 					Editor edt = new Editor();
-					edt.setVisivel(false);
-					edt.setLocationRelativeTo(null);
-					edt.setTitle("Nova SWITE");
+					edt.setCaminho(TABELA);
+					edt.setArquivo(propriedades.leitor("arquivoindice"));
+					edt.setEvento(10); 
+				 	edt.setLocationRelativeTo(null);
+					edt.setTitle(propriedades.leitor("tmodal002"));
 					edt.setVisible(true);
 					String lista = edt.getLista();
 					String nome = getNome();
 					
-					if (nome != null) {
-						if (edTabela.existe(nome,TABELA,propriedades.leitor("arquivoindice"))){
-							model.addRow(new Object[] { nome ,NULO,lista});
+					if (nome != null) 
+					{
+						
+						if (edTabela.existe(nome,INDICE))
+						{
+							model.addRow(new Object[] {nome ,NULO,lista});
 							edArquivo.Grava(INDICE, table);
-							model = edTabela.indice(INDICE);
-							table.setModel(model);
-							edTabela.ocultaColuna(table, 1);
-							edTabela.ocultaColuna(table, 2);
-							 
-							model_1.addRow(new Object[] { "NOVO", "NOVO","NOVO" });
-
+						    model_1.addRow(new Object[] { "NOVO", "NOVO","NOVO" });
 							edArquivo.NovoArquio(TABELA +INIT_ARQUIVO+ nome+ EXTENCAO, table_1,3);
-						} else {
 							 
-						}
+						}  
 					}
 				} catch (IOException e) {
-
+				
 					e.printStackTrace();
+
 				}finally{
-					vtor = null;
+					model = edTabela.indice(INDICE);
+					table.setModel(model);
+					edTabela.ocultaColuna(table, 1);
+					edTabela.ocultaColuna(table, 2);
 				}
 			}
 		});
 		
 	    this.btnSair.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
-	    		
 	    		dispose();
 	    	}
 	    });
@@ -392,32 +400,9 @@ public class Main extends JDialog implements IFrame  {
 	public String getNome(){
 		return novonome;
 	}
-	
-	public void setVetor(String nome) throws IOException {
-
-		String stg = nome.replace(SEPARE1, NULO);
-		
-		if (stg.split(Pattern.quote(SEPARE0)).length > 0)
-			vtor = stg.split(Pattern.quote(SEPARE0));
-		else
-			vtor = null;
-
-	}
-	
-	public String[] getVetor() {
-		return vtor ;
-	}
-	
+ 
 	public void setNome(String novonome ){
 		this.novonome = novonome ;
 	}
 	 
-	public void setEvento(int ev){
-		this.ev = ev;
-	}
-	
-	public int getEvento(){
-		return this.ev;
-	}
-
 }

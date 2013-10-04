@@ -216,13 +216,13 @@ public class Servidor extends JDialog {
 		model_2.addElement(list_j[i]);
 		 
 		
-		if(main.getVetor() != null){
-			System.out.println(main.getVetor().length);	
-			for(int i = 0; i < main.getVetor().length ; i++){
-			model.addElement(main.getVetor()[i]);
-			model_2.removeElement(main.getVetor()[i]);
+/*		if (main.getVetor() != null) {
+
+			for (int i = 0; i < main.getVetor().length; i++) {
+				model.addElement(main.getVetor()[i]);
+				model_2.removeElement(main.getVetor()[i]);
 			}
-		}
+		}*/
 		
 		JLabel lblNomeDoServidor = new JLabel("Nome do Servidor:");
 		
