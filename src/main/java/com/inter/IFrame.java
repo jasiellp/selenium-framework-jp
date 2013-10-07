@@ -9,6 +9,9 @@ public interface IFrame {
 	
 	public Propriedades propriedades = new Propriedades (ARQUIVO);
 	
+	
+	public final String ID_TYPE = "ID : ";
+	
 	public final String EXTENCAO = propriedades.leitor("extencao");	
 	
 	public final String INIT_ARQUIVO =  propriedades.leitor("init_arquivo");

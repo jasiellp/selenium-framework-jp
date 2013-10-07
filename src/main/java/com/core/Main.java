@@ -96,7 +96,7 @@ public class Main extends JDialog implements IFrame  {
 	private JButton btnAdd_1;
 	private JButton btnDelete_1;
 	private GroupLayout gl_panel_3;
-	private MainExtencaoLayout mExt;
+	private MainExtencaoLayout extencao;
 	
  
 	public Main() {
@@ -105,7 +105,7 @@ public class Main extends JDialog implements IFrame  {
 	 	this.setIconImage(new  ImageIcon((propriedades.leitor("iconeprincipal"))).getImage());
 		this.setBounds(100, 100, 745, 664);
 		
-		this.mExt = new MainExtencaoLayout();
+		this.extencao = new MainExtencaoLayout();
 		
 		this.contentPane = new JPanel();
 		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -187,15 +187,15 @@ public class Main extends JDialog implements IFrame  {
 			}
 		});
 	      
-		this.gl_contentPane = mExt.parte1(contentPane, panel);
+		this.gl_contentPane = extencao.parte1(contentPane, panel);
 		  
-	    this.gl_panel = mExt.part2(panel, panel_1, panel_2, panel_3);
+	    this.gl_panel = extencao.part2(panel, panel_1, panel_2, panel_3);
 	      
-		this.gl_panel_1 = mExt.parte3(panel_1, btnSair);
+		this.gl_panel_1 = extencao.parte3(panel_1, btnSair);
 	
-		this.gl_panel_3 = mExt.parte4(panel_3, scrollPane_1, btnAdd_1, btnDelete_1, btnRenomear);
+		this.gl_panel_3 = extencao.parte4(panel_3, scrollPane_1, btnAdd_1, btnDelete_1, btnRenomear);
 		
-		this.gl_panel_2 =  mExt.parte5(panel_2, scrollPane, btnAdd, btnDelete, btnRenomear);
+		this.gl_panel_2 = extencao.parte5(panel_2, scrollPane, btnAdd, btnDelete, btnRenomear);
 		
 		   
 		this.contentPane.setLayout(this.gl_contentPane);
@@ -294,6 +294,7 @@ public class Main extends JDialog implements IFrame  {
 					edt.setArquivo(propriedades.leitor("arquivoindice"));
 					edt.setID(getIDTabelas());
 					edt.setNome(getNomeTabelas());
+					edt.setlistas();
 					edt.setVisible(true); 
 				
 					model = edTabela.indice(INDICE);

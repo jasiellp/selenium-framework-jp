@@ -4,13 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,23 +17,20 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import com.core.Main;
 import com.inter.IFrame;
-import com.util.EditaArquivo;
 import com.util.EditaTabela;
-import com.variavel.Variaveis;
 
 public class Editor extends JDialog implements IFrame  {
 
 	 
 	private static final long serialVersionUID = 1L;
+	
 	private final JPanel contentPanel = new JPanel();
-	private static JTextField textField;
+	private JTextField textField;
 	private Main main = new Main();
 	private JButton cancelButton;
 	private JButton btnExcluir;
@@ -48,7 +43,7 @@ public class Editor extends JDialog implements IFrame  {
 	private String ARQUIVO2;
 	private String CAMINHO2;
 	private String NUMCOL;
-	private JButton button;
+	private JButton button2;
 	private static Editor dialog;
 	private JPanel panel_1;
 	private JPanel panel;
@@ -57,43 +52,39 @@ public class Editor extends JDialog implements IFrame  {
 	private JPanel panel_2;
 	private GroupLayout gl_contentPanel;
 	private GroupLayout gl_panel_2;
-	private JList list;
-	private JList list_1; 
+	private JList<String> list;
+	private JList<String> list_1; 
 	private JScrollPane scrollPane;
 	private JScrollPane scrollPane_1;
-	@SuppressWarnings("unused")
-	private Object[] selectionValues;
-	private String vlor = "";
-	private static String nomeVlr = "";
+	private EditorExtencaoLayout extencao;
+	
+	private String vlor = NULO;
+	
 	private EditaTabela edTabela = new EditaTabela();
-	private EditaArquivo edArquivo = new EditaArquivo();
-	private String[] list_j =  edTabela.getTab("properties\\value\\Variavel\\", "IVariavel.deb", 0 );
+
+	private String[] list_j =  edTabela.getTab(propriedades.leitor("arquivovariavel"), propriedades.leitor("arquivoivariaveis"), 0 );
 	private int evento;
 	private String[] vtor;
 	private Object[] indice;
 	
-	private DefaultListModel model;
-	private DefaultListModel model_2;
+	private DefaultListModel<String> model;
+	private DefaultListModel<String> model_2;
 	
 	public static void main(String[] args) {
 		try {
 			
 			dialog = new Editor();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-			dialog.setTitle("EDITOR");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-//	private final String ICONE = "properties\\ico\\";
- 
-	
+ 	
 	
 	public Editor() throws IOException {
-	
+		
+		this.extencao = new EditorExtencaoLayout();
 		this.setResizable(false);
 		this.setModal(true);
 		this.setModalExclusionType(ModalExclusionType.TOOLKIT_EXCLUDE);
@@ -102,16 +93,25 @@ public class Editor extends JDialog implements IFrame  {
 		this.contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.getContentPane().add(this.contentPanel, BorderLayout.CENTER);
 		
-		panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		textField = new JTextField();
-		textField.setColumns(10);
-		 
 		panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		{
-			cancelButton = new JButton("");
+		panel_1 = new JPanel();
+		panel_2 = new JPanel();
+		lblNewLabel_1 = new JLabel(NULO);
+		lblNewLabel = new JLabel();
+		btnExcluir = new JButton(new ImageIcon(propriedades.leitor("iconelixeira")));
+		cancelButton = new JButton(new ImageIcon(propriedades.leitor("iconesair")));
+		btnNewButton = new JButton(new ImageIcon(propriedades.leitor("iconeok")));
+		button2 = new JButton(new ImageIcon(propriedades.leitor("iconenext")));
+	    button_1 = new JButton(new ImageIcon(propriedades.leitor("iconeback")));
+		panel_1.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		textField.setColumns(10);
+		
+		panel.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		{ 
+			
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 				dispose();
@@ -119,23 +119,20 @@ public class Editor extends JDialog implements IFrame  {
 				}
 			});
 			cancelButton.setBackground(Color.WHITE);
-			cancelButton.setForeground(UIManager.getColor("Button.disabledShadow"));
-			cancelButton.setIcon(new ImageIcon(Editor.class.getResource("/com/image/sair.png")));
-			cancelButton.setActionCommand("Cancel");
+			
 		}
 		
-	    btnExcluir = new JButton("");
+	    
 	    btnExcluir.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
-	    		setMensagemLabel(0,"");	
-	    		edTabela.deleta(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),CAMINHO2,ARQUIVO2 );
+	    		setMensagemLabel(0,NULO);	
+	    		edTabela.deleta(CAMINHO,ARQUIVO,lblNewLabel.getText().replace(ID_TYPE, NULO),textField.getText(),CAMINHO2,ARQUIVO2 );
 	    		dispose();
 	    	}
 	    });
 	
-	    btnExcluir.setIcon(new ImageIcon(Editor.class.getResource("/com/image/lixeira.png")));
-		
-	    btnNewButton = new JButton("");
+	     
+	   
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
@@ -143,31 +140,33 @@ public class Editor extends JDialog implements IFrame  {
 					 
 					setLista(model);
 			 
-					if(getEvento() == 10)
+					if(textField.getText().trim().equals(NULO))
+			 		{
+						setMensagemLabel(1,propriedades.leitor("msg04"));
+			 		}
+					else
 					{
-						edTabela.criar(CAMINHO, ARQUIVO, textField.getText(), getLista());
-						dispose();
-					}
+							if(getEvento() == 10)
+							{
+								edTabela.criar(CAMINHO, ARQUIVO, textField.getText(), getLista());
+								dispose();
+							}
 					
-					if(getEvento() == 1)
-					{
+							if(getEvento() == 1)
+							{
 					    
-						if(igualNome(textField.getText()))
-						{
-						edTabela.alterar(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL, getLista());
-						main.setNome(textField.getText()); 
-					    selectionValues = list.getSelectedValues();
-						dispose();
+									if(igualNome(textField.getText()))
+									{
+										edTabela.alterar(CAMINHO,ARQUIVO,lblNewLabel.getText().replace(ID_TYPE, NULO),textField.getText(),NUMCOL, getLista());
+										main.setNome(textField.getText()); 
+										dispose();
 					
-						}
-						else
-						{
-							setMensagemLabel(1,"Nome Ja existe");
-						}
-					}
-					
-					
-					
+									}
+									else
+										setMensagemLabel(1,propriedades.leitor("msg03"));
+									
+							}
+					} 
 				 
 				/*
 				if(getEvento() == 1){
@@ -175,7 +174,7 @@ public class Editor extends JDialog implements IFrame  {
 					if(setLista(model) == 0)
 					 	setMensagemLabel(1,"Selecione um Item");
 					 
-					if(textField.getText() == null || textField.getText().trim().equals(""))
+					if(textField.getText() == null || textField.getText().trim().equals(NULO))
 						setMensagemLabel(1,"Digite o Nome");
 					else 
 					{
@@ -187,7 +186,7 @@ public class Editor extends JDialog implements IFrame  {
 					
 				}else{
 					
-					setMensagemLabel(0,"");
+					setMensagemLabel(0,NULO);
 					
 					setLista(model);
 				
@@ -197,115 +196,74 @@ public class Editor extends JDialog implements IFrame  {
 					else
 					{
 						if(Variaveis.getEvento() == 2)
-								edTabela.alt(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL);
+								edTabela.alt(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", NULO),textField.getText(),NUMCOL);
 							
 						else 
-								edTabela.alterar(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", ""),textField.getText(),NUMCOL,getLista());
+								edTabela.alterar(CAMINHO,ARQUIVO,lblNewLabel.getText().replace("ID : ", NULO),textField.getText(),NUMCOL,getLista());
 							 
 					}
 				}*/
 				
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					 e.printStackTrace();
 				}finally{
 					vtor = null;
-				
 				}
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(Editor.class.getResource("/com/image/ok.png")));
-	    gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-					.addGap(48)
-					.addComponent(btnExcluir, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-					.addGap(59)
-					.addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 43, Short.MAX_VALUE)
-						.addComponent(cancelButton, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 43, Short.MAX_VALUE)
-						.addComponent(btnExcluir, GroupLayout.PREFERRED_SIZE, 43, Short.MAX_VALUE))
-					.addContainerGap())
-		);
+	 
+	  
+		
+		gl_panel = this.extencao.parte1(btnNewButton, btnExcluir, cancelButton, panel); 
+		
 		panel.setLayout(gl_panel);
-		panel_2 = new JPanel();
-		panel_2.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 292, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_contentPanel.setVerticalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_contentPanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-					.addContainerGap())
-		);
 		
-		lblNewLabel_1 = new JLabel("");
+		panel_2.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+		gl_contentPanel =  extencao.parte2(contentPanel, panel_1, panel_2);
 		
-		lblNewLabel = new JLabel();
-		gl_panel_2 = new GroupLayout(panel_2);
-		gl_panel_2.setHorizontalGroup(
-			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblNewLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-						.addComponent(lblNewLabel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_panel_2.setVerticalGroup(
-			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_2.createSequentialGroup()
-					.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(71, Short.MAX_VALUE))
-		);
+		gl_panel_2 =  extencao.parte3(panel_2, lblNewLabel, lblNewLabel_1);
+		
 		panel_2.setLayout(gl_panel_2);
-		model = new DefaultListModel();
-		model_2 = new DefaultListModel();
+		
+		model = new DefaultListModel<String>();
+		
+		model_2 = new DefaultListModel<String>();
 		
 		for(int i = 0; i < list_j.length ; i++)
-		model_2.addElement(list_j[i]);
+			model_2.addElement(list_j[i]);
 		  
+	
+		for(int y = 0; y < model.size() ; y++)
+		{
+			for(int j = 0; j < list_j.length ; j++)
+			{
+				System.out.println("Modelo "+list_j[j]);
+				if(model.get(y).equals(list_j[j]))
+					model.remove(y);
+			}
+		}
 		
-		list = new JList(model_2);
+		
+		list = new JList<String>(model_2);
+		
 		scrollPane = new JScrollPane(list);
-		list_1 = new JList(model);
+		
+		list_1 = new JList<String>(model);
+		
 		scrollPane_1 = new JScrollPane(list_1);
-		
-		
-		
-		button = new JButton("");
-		button.addActionListener(new ActionListener() {
+		 
+	
+		button2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				model.addElement(list.getSelectedValue());
 				model_2.removeElement(list.getSelectedValue());
 			 
 			}
 		});
-		button.setIcon(new ImageIcon(Editor.class.getResource("/com/image/next.png")));
 		
-	    button_1 = new JButton("");
+		
+	   
 	    button_1.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		model_2.addElement(list_1.getSelectedValue());
@@ -313,47 +271,11 @@ public class Editor extends JDialog implements IFrame  {
 	    	}
 	    });
 	    
-		button_1.setIcon(new ImageIcon(Editor.class.getResource("/com/image/back.png")));
-		gl_panel_1 = new GroupLayout(panel_1);
-		gl_panel_1.setHorizontalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup()
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_1.createSequentialGroup()
-							.addGap(10)
-							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-								.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_panel_1.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(button, 0, 0, Short.MAX_VALUE)
-										.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-									.addGap(18)
-									.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))))
-						.addGroup(gl_panel_1.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, 264, GroupLayout.PREFERRED_SIZE)))
-					.addGap(6))
-		);
-		gl_panel_1.setVerticalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_1.createSequentialGroup()
-							.addComponent(button, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(11)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(11, Short.MAX_VALUE))
-		);
+	 
+
+	
+		gl_panel_1 = extencao.parte4(panel_1, panel, scrollPane, scrollPane_1, button2, button_1, textField);
+		
 		panel_1.setLayout(gl_panel_1);
 		contentPanel.setLayout(gl_contentPanel);
 	}
@@ -373,13 +295,12 @@ public class Editor extends JDialog implements IFrame  {
 
 
 	public void setID(String id){
-		this.lblNewLabel.setText( "ID : "+id);
+		this.lblNewLabel.setText(ID_TYPE+id);
 	}
 	
 	public void setNome(String nome){
 		this.textField.setText(nome);
-		this.nomeVlr=nome;
-	}
+	 }
 	
 	public   void setCaminho(String caminho){
 		this.CAMINHO = caminho;
@@ -408,7 +329,7 @@ public class Editor extends JDialog implements IFrame  {
 		this.scrollPane.setVisible(numCol);
 		this.scrollPane_1.setVisible(numCol);
 		this.button_1.setVisible(numCol);
-		this.button.setVisible(numCol);
+		this.button2.setVisible(numCol);
 	}
  
 	public void setEvento(int evento){
@@ -443,8 +364,8 @@ public class Editor extends JDialog implements IFrame  {
 	  
 		for(int i = 0; i < jp.size() ; i++)
 		{
-			if(!jp.get(i).toString().trim().equals(""))
-				vlor = vlor+jp.get(i)+SEPARE0;
+			if(!jp.get(i).toString().trim().equals(NULO))
+				this.vlor = this.vlor+jp.get(i)+SEPARE0;
 		}
 		return jp.size();
 	}
@@ -481,6 +402,16 @@ public class Editor extends JDialog implements IFrame  {
 	
 	}
 	
+	public void setlistas(){
+		  
+		for(int i = 0; i < list_j.length ; i++)
+			model_2.addElement(list_j[i]);
+		
+		
+		for(int j = 0; j < model.size() ; j++)
+			model_2.removeElement(model.get(j));
+		
+	}
 	
 	public String[] getVetor() {
 		return this.vtor ;
