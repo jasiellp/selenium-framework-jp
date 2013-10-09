@@ -1,4 +1,4 @@
-package com.core.panel;
+package com.core.painel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

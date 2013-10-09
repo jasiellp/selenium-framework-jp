@@ -24,7 +24,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import com.core.panel.Editor;
+import com.core.painel.Editor;
 import com.inter.ICombo;
 import com.inter.IFrame;
 import com.util.EditaArquivo;

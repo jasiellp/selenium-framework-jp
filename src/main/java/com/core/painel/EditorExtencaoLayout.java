@@ -1,4 +1,4 @@
-package com.core.panel;
+package com.core.painel;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;

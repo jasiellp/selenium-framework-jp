@@ -4,7 +4,7 @@ Bundle-Name: automacao
 Bundle-SymbolicName: automacao
 Bundle-Version: 1.0.0.qualifier
 Export-Package: com.core,
- com.core.panel,
+ com.core.painel,
  com.execucao,
  com.image,
  com.inter,
@@ -12,7 +12,7 @@ Export-Package: com.core,
  com.player,
  com.selenium,
  com.server,
- com.util.table,
  com.util,
+ com.util.table,
  com.variavel,
  teste_jp.automacao
