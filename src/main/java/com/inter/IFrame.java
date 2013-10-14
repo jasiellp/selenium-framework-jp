@@ -7,8 +7,9 @@ public interface IFrame {
 	 
 	public final String ARQUIVO = "config";
 	
-	public Propriedades propriedades = new Propriedades (ARQUIVO);
+	public final String COMANDOS = "comandos";
 	
+	public Propriedades propriedades = new Propriedades (ARQUIVO);
 	
 	public final String ID_TYPE = "ID : ";
 	

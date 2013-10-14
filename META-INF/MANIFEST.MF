@@ -4,8 +4,7 @@ Bundle-Name: automacao
 Bundle-SymbolicName: automacao
 Bundle-Version: 1.0.0.qualifier
 Export-Package: com.core,
- com.core.painel,
- com.execucao,
+ com.core.painel, 
  com.image,
  com.inter,
  com.menu,

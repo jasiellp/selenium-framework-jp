@@ -40,6 +40,7 @@ import com.util.SeleniumUtil;
 @SuppressWarnings("serial")
 public class Player extends JDialog {
 
+	private ICombo combo = new ICombo();
 	private final JPanel contentPanel = new JPanel();
 	private static Player dialog;
 	private JPanel panel;
@@ -595,20 +596,20 @@ public class Player extends JDialog {
 							while (getPause())
 								Thread.sleep(100);
 
-							if (comandos[i].equals(ICombo.Combo[1])) {
+							if (comandos[i].equals(combo.Combo[1])) {
 								cls.getDeclaredMethod("setUp", String.class,String.class).invoke(obj, alvo[i].get(1).toString(),massaDados[i]);
 								execucao.start();
 							}
 
-							if (comandos[i].equals(ICombo.Combo[2]))
+							if (comandos[i].equals(combo.Combo[2]))
 								Thread.sleep(Integer.parseInt(massaDados[i]));
 
-							if (comandos[i].equals(ICombo.Combo[3])) {
+							if (comandos[i].equals(combo.Combo[3])) {
 								Object screen = cls.getDeclaredMethod("testCapture").invoke(obj);
 								evidence.add(image.decodeAndWriteScreenshot(screen.toString()));
 							}
 							
-							if(comandos[i].equals(ICombo.Combo[4])){
+							if(comandos[i].equals(combo.Combo[4])){
 								Object valor = cls.getDeclaredMethod("testElemento", ArrayList.class).invoke(obj, alvo[i]);
 								setExption(i, valor, alvo2[i]);
 								
@@ -622,7 +623,7 @@ public class Player extends JDialog {
 								}
 							}
 
-							if (comandos[i].equals(ICombo.Combo[5])) {
+							if (comandos[i].equals(combo.Combo[5])) {
 								Object valor = cls.getDeclaredMethod("testElemento", ArrayList.class).invoke(obj, alvo[i]);
 								setExption(i,valor,alvo2[i]);
 
@@ -636,12 +637,12 @@ public class Player extends JDialog {
 
 							}
 
-							if (comandos[i].equals(ICombo.Combo[6])) {
+							if (comandos[i].equals(combo.Combo[6])) {
 								cls.getDeclaredMethod("tearDown").invoke(obj);
 								execucao.stop();
 							}
 							
-							if (comandos[i].equals(ICombo.Combo[7])) {
+							if (comandos[i].equals(combo.Combo[7])) {
 								Object valor = cls.getDeclaredMethod("testTexto", ArrayList.class).invoke(obj , alvo[i]);
 								setExption1(i, valor);
 									

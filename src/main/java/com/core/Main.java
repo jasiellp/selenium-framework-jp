@@ -29,7 +29,6 @@ import com.inter.ICombo;
 import com.inter.IFrame;
 import com.util.EditaArquivo;
 import com.util.EditaTabela;
-import com.util.propriedades.Propriedades;
 import com.util.table.JTableX;
 
 /*  JASIEL PEREIRA DE SANT ANA
@@ -44,9 +43,7 @@ import com.util.table.JTableX;
 public class Main extends JDialog implements IFrame  {
  
 	private static final long serialVersionUID = 1L;
- 
-	private Propriedades propriedades = new Propriedades (ARQUIVO);
-	
+ 	
 	private EditaTabela editaTabela = new EditaTabela();
 	
 	private EditaArquivo editaArquivo = new EditaArquivo();
@@ -75,112 +72,134 @@ public class Main extends JDialog implements IFrame  {
  	
 	private String novonome = null;
  	private int id = -2;
-	private JPanel painel_2;
+	private ICombo comandos = new ICombo();
+ 	
+ 	
 	private JButton botaoAddNovoArquivo;
+	private JButton botaoSalvarArquivo;
+
 	private JButton botaoEditarArquivo;
-	private JPanel paniel;
-	private GroupLayout gl_contentPane ;
-	private JPanel contentPane;
-	private JTable table;
-	private JPanel panel_1;
-	private GroupLayout gl_painel_2;
-	private GroupLayout gl_panel_1;
-	private GroupLayout gl_panel;
-	private DefaultTableModel model;
-	private DefaultTableModel model_1;
-	private JScrollPane scrollPane;
-	private JScrollPane scrollPane_1;
-	private JButton btnDelete;
-	private JButton btnSair;
-	private JPanel panel_3;
-	private JTableX table_1;
-	private JButton btnAdd_1;
-	private JButton btnDelete_1;
-	private GroupLayout gl_panel_3;
-	private MainExtencaoLayout extencao;
+	private JButton botaoSair;
+	private JButton botaoAddNovaLinha;
+	private JButton botaoDeletarLinha;
 	
+	
+	private JPanel paniel;
+	private JPanel painel1;
+	private JPanel painel2;
+	private JPanel painel3;
+	private JPanel contentPane;
+
+	private JTable  tabelaIndice;
+	private JTableX tabelaItemteste;
+	
+	private DefaultTableModel modeloTabelaIndice;
+	private DefaultTableModel modeloTabelaItemteste;
+	
+	private GroupLayout gl_painel;
+	private GroupLayout gl_painel1;
+	private GroupLayout gl_painel2;
+	private GroupLayout gl_painel3;
+	private GroupLayout gl_contentPane;
+	
+	
+	private JScrollPane scrollPaneTabelaIndice;
+	private JScrollPane scrollPaneTabelaItemteste;
+  
+	private MainExtencaoLayout extencao;
+	private ArrayList<JButton> botoes;
  
 	public Main() {
 		
 		this.setModal(true);
-	 	this.setIconImage(new  ImageIcon((propriedades.leitor("iconeprincipal"))).getImage());
+
+		this.setIconImage(new  ImageIcon((propriedades.leitor("iconeprincipal"))).getImage());
+		
 		this.setBounds(100, 100, 745, 664);
 		
 		this.extencao = new MainExtencaoLayout();
 		
 		this.contentPane = new JPanel();
+		
 		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		
 		this.setContentPane(contentPane);
 		 
-		this.paniel = new JPanel();
-		this.panel_1 = new JPanel();
-		this.painel_2 = new JPanel();
-		this.panel_3 = new JPanel();
+		this.paniel  = new JPanel();
+		
+		this.painel1 = new JPanel();
+		
+		this.painel2 = new JPanel();
+		
+		this.painel3 = new JPanel();
 	 
-		this.btnSair = new JButton(new ImageIcon((propriedades.leitor("iconesair"))));
-		this.btnSair.setBackground(Color.WHITE);
+		this.botaoSair = new JButton(new ImageIcon((propriedades.leitor("iconesair"))));
 		
-		this.btnDelete = new JButton(new ImageIcon((propriedades.leitor("iconeeditar"))));
-		this.btnDelete.setBackground(Color.WHITE);
+		this.botaoEditarArquivo = new JButton(new ImageIcon((propriedades.leitor("iconeeditar"))));
 		
-		this.btnDelete_1 = new JButton(new ImageIcon((propriedades.leitor("iconelixeira"))));
-		this.btnDelete_1.setBackground(Color.WHITE);
+		this.botaoDeletarLinha = new JButton(new ImageIcon((propriedades.leitor("iconelixeira"))));
 		
 		this.botaoAddNovoArquivo = new JButton(new ImageIcon((propriedades.leitor("iconeadd"))));
-		this.botaoAddNovoArquivo.setBackground(Color.WHITE);
 		
-		this.btnAdd_1 = new JButton(new ImageIcon((propriedades.leitor("iconeadd"))));
-		this.btnAdd_1.setBackground(Color.WHITE);
+		this.botaoAddNovaLinha = new JButton(new ImageIcon((propriedades.leitor("iconeadd"))));
 		 
-	    this.botaoEditarArquivo = new JButton(new ImageIcon((propriedades.leitor("iconesalve"))));
-	    this.botaoEditarArquivo.setBackground(Color.WHITE);
+	    this.botaoSalvarArquivo = new JButton(new ImageIcon((propriedades.leitor("iconesalve"))));
+	  
+	    this.botoes = new ArrayList<JButton>();
 		
-		this.model = new DefaultTableModel(); 
-		this.model = editaTabela.indice(INDICE);
+	    this.botoes.add(botaoAddNovaLinha);
 		
-		this.model_1 = editaTabela.setValorTabela(TABELA,NULO,true);
+	    this.botoes.add(botaoAddNovoArquivo);
+		
+	    this.botoes.add(botaoDeletarLinha);
+		
+	    this.botoes.add(botaoEditarArquivo);
+		
+	    this.botoes.add(botaoSair);
+		
+	    this.botoes.add(botaoSalvarArquivo);
+		
+	    this.extencao.setCorBotao(botoes, Color.WHITE);
+	    
+	    
+		
+		
+		this.modeloTabelaItemteste = editaTabela.setValorTabela(TABELA,NULO,true);
 		 
-		this.table_1 = new JTableX(model_1);
-		this.table_1.setRowHeight(20);
-		 
-		this.table = new JTable(model); 
-		this.table.setShowHorizontalLines(false);
-		this.table.setDefaultEditor(Object.class, null);
-		
-		this.editaTabela.ocultaColuna(table, 1);
-		this.editaTabela.ocultaColuna(table, 2);
-		 
-		this.scrollPane = new JScrollPane(table);
-		
-		this.scrollPane_1 = new JScrollPane(table_1);
+		this.tabelaItemteste = new JTableX(modeloTabelaItemteste);
+		this.tabelaItemteste.setRowHeight(20);
+		this.modeloTabelaIndice = new DefaultTableModel(); 
+		this.modeloTabelaIndice = editaTabela.indice(INDICE);
+		this.tabelaIndice = new JTable(modeloTabelaIndice); 
+		this.tabelaIndice.setShowHorizontalLines(false);
+		this.tabelaIndice.setDefaultEditor(Object.class, null);
+		this.editaTabela.ocultaColuna(tabelaIndice, 1);
+		this.editaTabela.ocultaColuna(tabelaIndice, 2);
+		this.scrollPaneTabelaIndice = new JScrollPane(tabelaIndice);
+		this.scrollPaneTabelaItemteste = new JScrollPane(tabelaItemteste);
 		
 		this.paniel.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		this.panel_1.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
-	    this.painel_2.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
-	    this.panel_3.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		this.painel1.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+	    this.painel2.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+	    this.painel3.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	    
 	 
 	    
-	    this.botaoEditarArquivo.addActionListener(new ActionListener() {
+	    this.botaoSalvarArquivo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
-					id = table.getSelectedRow();
-					if (id == -1) {
-						
-						JOptionPane.showMessageDialog(new JFrame(),
-								propriedades.leitor("msg00"),
-							    propriedades.leitor("erro"),
-							    JOptionPane.ERROR_MESSAGE);
-					}else{
-						
-						editaArquivo.NovoArquio(TABELA + INIT_ARQUIVO+ table.getModel().getValueAt(table.getSelectedRow(), 0).toString()+ EXTENCAO, table_1,3);
-
-					JOptionPane.showMessageDialog(new JFrame(),
-							propriedades.leitor("msg01"),
-							propriedades.leitor("sucesso"),
-						    JOptionPane.INFORMATION_MESSAGE);
+					id = tabelaIndice.getSelectedRow();
+					if (id == -1) 
+					{
+						extencao.mensagemDialogo(propriedades.leitor("msg00"), propriedades.leitor("erro"), JOptionPane.ERROR_MESSAGE);
 					}
+					else
+					{
+						editaArquivo.NovoArquio(TABELA + INIT_ARQUIVO+ tabelaIndice.getModel().getValueAt(tabelaIndice.getSelectedRow(), 0).toString()+ EXTENCAO, tabelaItemteste,3);
+						extencao.mensagemDialogo(propriedades.leitor("msg01"),propriedades.leitor("sucesso"),JOptionPane.INFORMATION_MESSAGE);
+					}
+					
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -190,36 +209,36 @@ public class Main extends JDialog implements IFrame  {
 	      
 		this.gl_contentPane = extencao.parte1(contentPane, paniel);
 		  
-	    this.gl_panel = extencao.part2(paniel, panel_1, painel_2, panel_3);
+	    this.gl_painel = extencao.part2(paniel, painel1, painel2, painel3);
 	      
-		this.gl_panel_1 = extencao.parte3(panel_1, btnSair);
+		this.gl_painel1 = extencao.parte3(painel1, botaoSair);
 	
-		this.gl_panel_3 = extencao.parte4(panel_3, scrollPane_1, btnAdd_1, btnDelete_1, botaoEditarArquivo);
+		this.gl_painel3 = extencao.parte4(painel3, scrollPaneTabelaItemteste, botaoAddNovaLinha, botaoDeletarLinha, botaoSalvarArquivo);
 		
-		this.gl_painel_2 = extencao.parte5(painel_2, scrollPane, botaoAddNovoArquivo, btnDelete, botaoEditarArquivo);
+		this.gl_painel2 = extencao.parte5(painel2, scrollPaneTabelaIndice, botaoAddNovoArquivo, botaoEditarArquivo, botaoSalvarArquivo);
 		
 		   
 		this.contentPane.setLayout(this.gl_contentPane);
 		
-		this.paniel.setLayout(this.gl_panel);
+		this.paniel.setLayout(this.gl_painel);
 		
-		this.panel_1.setLayout(this.gl_panel_1);
+		this.painel1.setLayout(this.gl_painel1);
 	  
-		this.painel_2.setLayout(this.gl_painel_2);
+		this.painel2.setLayout(this.gl_painel2);
 		
-		this.panel_3.setLayout(this.gl_panel_3);
+		this.painel3.setLayout(this.gl_painel3);
 		  
-		this.table.addMouseListener(new MouseAdapter() {  
+		this.tabelaIndice.addMouseListener(new MouseAdapter() {  
 		 
 			public void mouseClicked(MouseEvent e)  
 		    {
 				if (e.getClickCount() == 1) {
-					model_1 = editaTabela.setValorTabela(TABELA, table
-							.getModel().getValueAt(table.getSelectedRow(), 0)
+					modeloTabelaItemteste = editaTabela.setValorTabela(TABELA, tabelaIndice
+							.getModel().getValueAt(tabelaIndice.getSelectedRow(), 0)
 							.toString(), true);
 
-					table_1.setModel(model_1);
-					editaTabela.setCombo(table_1.getColumnModel().getColumn(0), ICombo.Combo);
+					tabelaItemteste.setModel(modeloTabelaItemteste);
+					editaTabela.setCombo(tabelaItemteste.getColumnModel().getColumn(0), comandos.Combo);
 
 					int cot = editaTabela.indice(VARIAVEL).getRowCount();
 
@@ -230,7 +249,7 @@ public class Main extends JDialog implements IFrame  {
 						indice[i + 1] = editaTabela.indice(VARIAVEL).getValueAt(i, 0);
 
 				 
-					String[] varia = table.getModel().getValueAt(table.getSelectedRow(), 2).toString().split(Pattern.quote(SEPARE0));
+					String[] varia = tabelaIndice.getModel().getValueAt(tabelaIndice.getSelectedRow(), 2).toString().split(Pattern.quote(SEPARE0));
 					ArrayList<String[]> listaCombo = new ArrayList<String[]>();
 					ArrayList<String> listaCombo2 = new ArrayList<String>();
 					
@@ -246,17 +265,17 @@ public class Main extends JDialog implements IFrame  {
 					  
 					
      			 
-					editaTabela.setComboAr(table_1.getColumnModel().getColumn(1), listaCombo,listaCombo2);
+					editaTabela.setComboAr(tabelaItemteste.getColumnModel().getColumn(1), listaCombo,listaCombo2);
 					  
 				 
 				}
 			}
 		}); 
 		  
-		this.btnDelete.addActionListener(new ActionListener() {
+		this.botaoEditarArquivo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0){
 
-				id = table.getSelectedRow();
+				id = tabelaIndice.getSelectedRow();
 				if (id == -1) {
 					
 					JOptionPane.showMessageDialog(new JFrame(),
@@ -267,10 +286,10 @@ public class Main extends JDialog implements IFrame  {
 					
 					try {
 					
-					table.setModel(model);
+						tabelaIndice.setModel(modeloTabelaIndice);
 					
-				    String nome = table.getModel().getValueAt(table.getSelectedRow(), 2).toString();
-				    String nome1 =table.getModel().getValueAt(table.getSelectedRow(), 0).toString();
+				    String nome = tabelaIndice.getModel().getValueAt(tabelaIndice.getSelectedRow(), 2).toString();
+				    String nome1 =tabelaIndice.getModel().getValueAt(tabelaIndice.getSelectedRow(), 0).toString();
 				 
 					int cot = editaTabela.indice(INDICE).getRowCount();
 					Object[] indice = new Object[cot];
@@ -290,7 +309,7 @@ public class Main extends JDialog implements IFrame  {
 				    edt.setIgualNome(indice);
 				    edt.setLocationRelativeTo(null);
 					edt.setTitle(propriedades.leitor("tmodal001"));
-					edt.setNumCol(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
+					edt.setNumCol(tabelaIndice.getModel().getValueAt(tabelaIndice.getSelectedRow(), 2).toString());
 					edt.setCaminho(TABELA);
 					edt.setArquivo(propriedades.leitor("arquivoindice"));
 					edt.setID(getIDTabelas());
@@ -298,10 +317,10 @@ public class Main extends JDialog implements IFrame  {
 					edt.setlistas();
 					edt.setVisible(true); 
 				
-					model = editaTabela.indice(INDICE);
-					table.setModel(model);
-					editaTabela.ocultaColuna(table, 1);
-					editaTabela.ocultaColuna(table, 2);
+					modeloTabelaIndice = editaTabela.indice(INDICE);
+					tabelaIndice.setModel(modeloTabelaIndice);
+					editaTabela.ocultaColuna(tabelaIndice, 1);
+					editaTabela.ocultaColuna(tabelaIndice, 2);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -330,10 +349,10 @@ public class Main extends JDialog implements IFrame  {
 						
 						if (editaTabela.existe(nome,INDICE))
 						{
-							model.addRow(new Object[] {nome ,NULO,lista});
-							editaArquivo.Grava(INDICE, table);
-						    model_1.addRow(new Object[] { "NOVO", "NOVO","NOVO" });
-							editaArquivo.NovoArquio(TABELA +INIT_ARQUIVO+ nome+ EXTENCAO, table_1,3);
+							modeloTabelaIndice.addRow(new Object[] {nome ,NULO,lista});
+							editaArquivo.Grava(INDICE, tabelaIndice);
+						    modeloTabelaItemteste.addRow(new Object[] { "NOVO", "NOVO","NOVO" });
+							editaArquivo.NovoArquio(TABELA +INIT_ARQUIVO+ nome+ EXTENCAO, tabelaItemteste,3);
 							 
 						}  
 					}
@@ -342,24 +361,24 @@ public class Main extends JDialog implements IFrame  {
 					e.printStackTrace();
 
 				}finally{
-					model = editaTabela.indice(INDICE);
-					table.setModel(model);
-					editaTabela.ocultaColuna(table, 1);
-					editaTabela.ocultaColuna(table, 2);
+					modeloTabelaIndice = editaTabela.indice(INDICE);
+					tabelaIndice.setModel(modeloTabelaIndice);
+					editaTabela.ocultaColuna(tabelaIndice, 1);
+					editaTabela.ocultaColuna(tabelaIndice, 2);
 				}
 			}
 		});
 		
-	    this.btnSair.addActionListener(new ActionListener() {
+	    this.botaoSair.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		dispose();
 	    	}
 	    });
 	    
-		this.btnAdd_1.addActionListener(new ActionListener() {
+		this.botaoAddNovaLinha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				 
-				id = table.getSelectedRow();
+				id = tabelaIndice.getSelectedRow();
 				if (id == -1) {
 					
 					JOptionPane.showMessageDialog(new JFrame(),
@@ -367,25 +386,25 @@ public class Main extends JDialog implements IFrame  {
 							propriedades.leitor("erro"),
 						    JOptionPane.ERROR_MESSAGE);
 				}else
-					model_1.addRow(new Object[]{" --- "});
+					modeloTabelaItemteste.addRow(new Object[]{" --- "});
 				 
 			}
 		});
 	
-		this.btnDelete_1.addActionListener(new ActionListener() {
+		this.botaoDeletarLinha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				removeSelectedFromTable(table_1);
+				removeSelectedFromTable(tabelaItemteste);
 			}
 		});
 				
 	}
 	 
 	public String getNomeTabelas(){
-	 	return this.table.getModel().getValueAt(this.table.getSelectedRow(), 0).toString();
+	 	return this.tabelaIndice.getModel().getValueAt(this.tabelaIndice.getSelectedRow(), 0).toString();
 	}
 	
 	public String getIDTabelas(){
-	 	return this.table.getModel().getValueAt(this.table.getSelectedRow(), 1).toString();
+	 	return this.tabelaIndice.getModel().getValueAt(this.tabelaIndice.getSelectedRow(), 1).toString();
 	}
 	
 	private void removeSelectedFromTable(JTable from) {
