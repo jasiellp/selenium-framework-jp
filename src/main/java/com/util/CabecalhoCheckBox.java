@@ -13,8 +13,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
  
 
-public class CabecalhoCheckBox extends JCheckBox implements TableCellRenderer,
-		MouseListener {
+public class CabecalhoCheckBox extends JCheckBox implements TableCellRenderer, MouseListener {
 
 	protected CabecalhoCheckBox rendererComponent;
 	protected int column;

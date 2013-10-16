@@ -3,7 +3,6 @@ package com.player;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -14,21 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import com.inter.ICombo;
-import com.selenium.JpSelenium;
+import com.inter.IFrame;
 import com.util.CabecalhoCheckBox;
 import com.util.Chronometer;
 import com.util.EditaTabela;
@@ -37,52 +34,70 @@ import com.util.ItemCabecalho;
 import com.util.RendererCelula;
 import com.util.SeleniumUtil;
 
-@SuppressWarnings("serial")
-public class Player extends JDialog {
 
+public class Player extends JDialog implements IFrame{
+
+	
+	private static final long serialVersionUID = 8972926567211235479L;
+	
 	private ICombo combo = new ICombo();
-	private final JPanel contentPanel = new JPanel();
+	private JPanel contentpainel = new JPanel();
 	private static Player dialog;
-	private JPanel panel;
-	private GroupLayout gl_contentPanel;
-	private GroupLayout gl_panel;
-	private GroupLayout gl_panel_1;
-	private GroupLayout gl_panel_2;
-	private GroupLayout gl_panel_3;
-	private GroupLayout gl_panel_4;
-	private JPanel panel_1;
-	private JPanel panel_2;
-	private JPanel panel_3;
-	private JButton button;
-	private JScrollPane scrollPane;
-	private JScrollPane scrollPane_1;
-	private JTable table;
-	private JTable table_1;
-	private DefaultTableModel model;
-	private DefaultTableModel model_1;
-	private JPanel panel_4;
-	private JButton button_2;
-	private JButton button_3;
-	private JButton button_4;
-	private JButton button_5;
-	private JButton button_6;
-	private final String TABELA = "properties\\value\\";
-	private final String VARIAVEL = "properties\\value\\Variavel";
-	private EditaTabela edTabela = new EditaTabela();
-	private final String caminho = "C:\\Base\\teste";
+	
+	private GroupLayout gl_contentpainel;
+	private GroupLayout gl_painel;
+	private GroupLayout gl_painel1;
+	private GroupLayout gl_painel2;
+	private GroupLayout gl_painel3;
+	private GroupLayout gl_painel4;
+	
+	private JPanel painel;
+	private JPanel painel1;
+	private JPanel painel2;
+	private JPanel painel3;
+	private JPanel painel4;
+	
+	private JScrollPane scrollPaneTabelaIndice;
+	private JScrollPane scrollPaneTabelaItemteste;
+	
+	private JTable tabelaItemteste;
+	private JTable tabelaIndice;
+	
+	private DefaultTableModel modeloTabelaItemteste;
+	private DefaultTableModel modeloTabelaIndice;
+	
+	private JButton botaoSair;
+	private JButton botaoPlay;
+	private JButton botaoPause;
+	private JButton botaoStop;
+	private JButton botaoAvancar;
+	private JButton botaoPrint;
+	
+	private EditaTabela editaTabela = new EditaTabela();
+	private String caminho = "C:\\Base\\teste";
 	private String valor;
+	
 	private int tempo;
-	private RendererCelula rendere;
-	private RendererCelula rendere_1;
+	
+	private RendererCelula colorirTabelaIndice;
+	private RendererCelula colorirTabelaItemteste;
+	private PlayerExtencaoLayout extencao;
+	
+	
 	private boolean pause = false;
 	private boolean pare = false;
 	private int indicador = 0;
-	private Thread t;
+	
+	private Thread thread;
+	
 	private ImagemUtil image = new ImagemUtil();
+	
 	private List<Image> evidence = new ArrayList<Image>();;
-	private JpSelenium jpselenium = new JpSelenium();
+	
 	private SeleniumUtil sUtil = new SeleniumUtil();
+	
 	private TableColumn tc;
+
 	@SuppressWarnings("rawtypes")
 	private Class cls;
 	private Object obj;
@@ -102,371 +117,171 @@ public class Player extends JDialog {
 
 	public Player() {
 
-		this.rendere = new RendererCelula();
-		this.rendere_1 = new RendererCelula();
+		this.extencao = new PlayerExtencaoLayout();
+		this.colorirTabelaIndice = new RendererCelula();
+		this.colorirTabelaItemteste = new RendererCelula();
 		this.setModal(true);
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(
-				Player.class.getResource("/com/image/cpqi.png")));
+		
+		this.setIconImage(new  ImageIcon(propriedades.leitor("iconeprincipal")).getImage());
+		
 		this.setBounds(100, 100, 744, 651);
 		this.getContentPane().setLayout(new BorderLayout());
-		this.contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		this.getContentPane().add(contentPanel, BorderLayout.CENTER);
+		this.contentpainel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.getContentPane().add(contentpainel, BorderLayout.CENTER);
 
-		this.model = new DefaultTableModel();
-		this.model = edTabela.indiceBoolean();
-		this.model_1 = new DefaultTableModel();
-		this.model_1 = edTabela.setValorTabela(TABELA, "", false);
-		this.table = new JTable(this.model);
-		this.table.setDefaultRenderer(Object.class, this.rendere_1);
+		this.modeloTabelaItemteste = new DefaultTableModel();
+		this.modeloTabelaItemteste = editaTabela.indiceBoolean();
+		this.modeloTabelaIndice = new DefaultTableModel();
+		this.modeloTabelaIndice = editaTabela.setValorTabela(TABELA, NULO, false);
+		
+		this.tabelaItemteste = new JTable(this.modeloTabelaItemteste);
+		this.tabelaItemteste.setDefaultRenderer(Object.class, this.colorirTabelaItemteste);
+		this.tabelaItemteste.getColumnModel().getColumn(2).setMinWidth(0);
+		this.tabelaItemteste.getColumnModel().getColumn(2).setPreferredWidth(0);
+		this.tabelaItemteste.getColumnModel().getColumn(2).setMaxWidth(0);
 
-		this.table.getColumnModel().getColumn(2).setMinWidth(0);
-		this.table.getColumnModel().getColumn(2).setPreferredWidth(0);
-		this.table.getColumnModel().getColumn(2).setMaxWidth(0);
+		this.tabelaIndice = new JTable(this.modeloTabelaIndice);
+		this.tabelaIndice.setEnabled(false);
+		this.tabelaIndice.setDefaultRenderer(Object.class, this.colorirTabelaIndice);
 
-		this.table_1 = new JTable(this.model_1);
-		this.table_1.setEnabled(false);
-		this.table_1.setDefaultRenderer(Object.class, this.rendere);
+		this.scrollPaneTabelaItemteste = new JScrollPane(this.tabelaItemteste);
 
-		this.scrollPane_1 = new JScrollPane(this.table);
+		this.tc = this.tabelaItemteste.getColumnModel().getColumn(0);
+		this.tc.setCellEditor(this.tabelaItemteste.getDefaultEditor(Boolean.class));
+		this.tc.setCellRenderer(this.tabelaItemteste.getDefaultRenderer(Boolean.class));
+		this.tc.setHeaderRenderer(new CabecalhoCheckBox(new ItemCabecalho(this.tabelaItemteste)));
 
-		this.tc = this.table.getColumnModel().getColumn(0);
-		this.tc.setCellEditor(this.table.getDefaultEditor(Boolean.class));
-		this.tc.setCellRenderer(this.table.getDefaultRenderer(Boolean.class));
-		this.tc.setHeaderRenderer(new CabecalhoCheckBox(new ItemCabecalho(
-				this.table)));
+		this.scrollPaneTabelaIndice = new JScrollPane(this.tabelaIndice);
 
-		this.scrollPane = new JScrollPane(this.table_1);
+		this.painel = new JPanel();
+		this.painel.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		this.painel1 = new JPanel();
+		this.painel1.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING,TitledBorder.TOP, null, null));
 
-		this.panel = new JPanel();
-		this.panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
-		this.gl_contentPanel = new GroupLayout(contentPanel);
-		this.gl_contentPanel.setHorizontalGroup(this.gl_contentPanel
-				.createParallelGroup(Alignment.LEADING).addGroup(
-						this.gl_contentPanel
-								.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(this.panel,
-										GroupLayout.DEFAULT_SIZE, 698,
-										Short.MAX_VALUE).addContainerGap()));
-		this.gl_contentPanel.setVerticalGroup(this.gl_contentPanel
-				.createParallelGroup(Alignment.LEADING).addGroup(
-						Alignment.TRAILING,
-						gl_contentPanel
-								.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(this.panel,
-										GroupLayout.DEFAULT_SIZE, 581,
-										Short.MAX_VALUE).addContainerGap()));
+		this.painel2 = new JPanel();
+		this.painel2.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING,TitledBorder.TOP, null, null));
 
-		this.panel_1 = new JPanel();
-		this.panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
+		this.painel3 = new JPanel();
+		this.painel3.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING,TitledBorder.TOP, null, null));
+		
+		this.painel4 = new JPanel();
+		
+		this.botaoSair = new JButton(new ImageIcon(propriedades.leitor("iconesair")));
+		this.botaoPlay = new JButton(new ImageIcon(propriedades.leitor("iconeplay")));
+		this.botaoPause = new JButton(new ImageIcon(propriedades.leitor("iconepause")));
+		this.botaoStop = new JButton(new ImageIcon(propriedades.leitor("iconestop")));
+		this.botaoAvancar = new JButton(new ImageIcon(propriedades.leitor("iconeavanca")));
+		this.botaoPrint = new JButton(new ImageIcon(propriedades.leitor("iconeprint")));
+		
+		this.botaoSair.setBackground(Color.WHITE);
+		this.botaoPlay.setBackground(Color.WHITE); 
+		this.botaoPause.setBackground(Color.WHITE);
+		this.botaoStop.setBackground(Color.WHITE);
+		this.botaoAvancar.setBackground(Color.WHITE);
+		this.botaoPrint.setBackground(Color.WHITE);
+		
+		
+		
+		
+		this.gl_contentpainel = extencao.parte1(contentpainel, painel);
+		
+		this.gl_painel3 = extencao.parte2(painel3, botaoSair);
+		
+		this.gl_painel = extencao.parte3(painel, painel4, painel1, painel2, painel3);
+		
 
-		this.panel_2 = new JPanel();
-		this.panel_2.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
+		
+		botaoPlay.addActionListener(new ActionListener() {
 
-		this.panel_3 = new JPanel();
-		this.panel_3.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
+			public void actionPerformed(ActionEvent arg0) {
+				setPause(false);
+				thread = new Thread(threads);
+				thread.start();
+				botaoPlay.setEnabled(false);
+				botaoStop.setEnabled(true);
+				botaoPause.setEnabled(true);
 
-		this.button = new JButton("");
-		this.button.addActionListener(new ActionListener() {
+			}
+		});
+		
+		
+		
+		this.botaoSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
 			}
 		});
-
-		this.button.setIcon(new ImageIcon(Player.class
-				.getResource("/com/image/sair.png")));
-		this.button.setBackground(Color.WHITE);
-		this.gl_panel_3 = new GroupLayout(panel_3);
-		this.gl_panel_3.setHorizontalGroup(this.gl_panel_3.createParallelGroup(
-				Alignment.TRAILING).addGroup(
-				this.gl_panel_3
-						.createSequentialGroup()
-						.addContainerGap(43, Short.MAX_VALUE)
-						.addComponent(this.button, GroupLayout.PREFERRED_SIZE,
-								73, GroupLayout.PREFERRED_SIZE).addGap(27)));
-		this.gl_panel_3.setVerticalGroup(this.gl_panel_3.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				this.gl_panel_3
-						.createSequentialGroup()
-						.addComponent(this.button, GroupLayout.PREFERRED_SIZE,
-								54, Short.MAX_VALUE).addGap(1)));
-		this.panel_3.setLayout(this.gl_panel_3);
-
-		this.panel_4 = new JPanel();
-		this.gl_panel = new GroupLayout(panel);
-		this.gl_panel
-				.setHorizontalGroup(this.gl_panel
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								this.gl_panel
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												this.gl_panel
-														.createParallelGroup(
-																Alignment.LEADING,
-																false)
-														.addComponent(
-																this.panel_4,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addComponent(
-																this.panel_1,
-																GroupLayout.DEFAULT_SIZE,
-																501,
-																Short.MAX_VALUE))
-										.addPreferredGap(
-												ComponentPlacement.UNRELATED)
-										.addGroup(
-												this.gl_panel
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addComponent(
-																this.panel_3,
-																GroupLayout.DEFAULT_SIZE,
-																155,
-																Short.MAX_VALUE)
-														.addComponent(
-																this.panel_2,
-																GroupLayout.DEFAULT_SIZE,
-																155,
-																Short.MAX_VALUE))
-										.addContainerGap()));
-		this.gl_panel
-				.setVerticalGroup(this.gl_panel
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								this.gl_panel
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												this.gl_panel
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addComponent(
-																this.panel_1,
-																Alignment.LEADING,
-																GroupLayout.DEFAULT_SIZE,
-																460,
-																Short.MAX_VALUE)
-														.addComponent(
-																this.panel_2,
-																Alignment.LEADING,
-																GroupLayout.DEFAULT_SIZE,
-																460,
-																Short.MAX_VALUE))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												this.gl_panel
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addComponent(
-																this.panel_4,
-																GroupLayout.DEFAULT_SIZE,
-																80,
-																Short.MAX_VALUE)
-														.addComponent(
-																this.panel_3,
-																Alignment.LEADING,
-																GroupLayout.PREFERRED_SIZE,
-																80,
-																GroupLayout.PREFERRED_SIZE))
-										.addContainerGap()));
-
-		this.button_2 = new JButton();
-		button_2.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				setPause(false);
-				t = new Thread(threadsss);
-				t.start();
-				button_2.setEnabled(false);
-				button_4.setEnabled(true);
-				button_3.setEnabled(true);
-
-			}
-		});
-
-		this.button_2.setBackground(Color.WHITE);
-		this.button_2.setIcon(new ImageIcon(Player.class
-				.getResource("/com/image/play_Icon.png")));
-
-		this.button_3 = new JButton();
-		this.button_3.setEnabled(false);
-		button_3.addActionListener(new ActionListener() {
+ 
+		
+		this.botaoPause.setEnabled(false);
+		botaoPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (indicador == 0) {
 					setPause(true);
 
-					button_2.setEnabled(false);
-					button_4.setEnabled(false);
-					button_5.setEnabled(true);
+					botaoPlay.setEnabled(false);
+					botaoStop.setEnabled(false);
+					botaoAvancar.setEnabled(true);
 
 					indicador = 1;
 				} else {
 					setPause(false);
 
-					button_4.setEnabled(true);
-					button_3.setEnabled(true);
-					button_5.setEnabled(false);
+					botaoStop.setEnabled(true);
+					botaoPause.setEnabled(true);
+					botaoAvancar.setEnabled(false);
 					indicador = 0;
 				}
 
 			}
 		});
-		this.button_3.setBackground(Color.WHITE);
-		this.button_3.setIcon(new ImageIcon(Player.class
-				.getResource("/com/image/Pause.png")));
-
-		this.button_4 = new JButton();
-		this.button_4.setEnabled(false);
-		button_4.addActionListener(new ActionListener() {
+		 
+		
+		this.botaoStop.setEnabled(false);
+		botaoStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setPare(true);
 			}
 		});
-		this.button_4.setBackground(Color.WHITE);
-		this.button_4.setIcon(new ImageIcon(Player.class
-				.getResource("/com/image/Stop.png")));
-
-		this.button_5 = new JButton();
-		this.button_5.setEnabled(false);
-		button_5.addActionListener(new ActionListener() {
+		
+	
+		this.botaoAvancar.setEnabled(false);
+		botaoAvancar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (indicador == 1)
 					setPause(false);
 			}
 		});
-		this.button_5.setBackground(Color.WHITE);
-		this.button_5.setIcon(new ImageIcon(Player.class
-				.getResource("/com/image/Avanca.png")));
+		
 
-		this.button_6 = new JButton();
-		this.button_6.setIcon(new ImageIcon(Player.class
-				.getResource("/com/image/Print.jpg")));
-		this.button_6.setBackground(Color.WHITE);
-		this.gl_panel_4 = new GroupLayout(this.panel_4);
-		gl_panel_4.setHorizontalGroup(gl_panel_4.createParallelGroup(
-				Alignment.TRAILING).addGroup(
-				gl_panel_4
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(button_2, GroupLayout.PREFERRED_SIZE, 60,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(37)
-						.addComponent(button_3, GroupLayout.PREFERRED_SIZE, 60,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 37,
-								Short.MAX_VALUE)
-						.addComponent(button_4, GroupLayout.PREFERRED_SIZE, 60,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(33)
-						.addComponent(button_5, GroupLayout.PREFERRED_SIZE, 60,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(72)
-						.addComponent(button_6, GroupLayout.PREFERRED_SIZE, 62,
-								GroupLayout.PREFERRED_SIZE).addContainerGap()));
-		gl_panel_4
-				.setVerticalGroup(gl_panel_4
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								gl_panel_4
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												gl_panel_4
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addComponent(
-																button_3,
-																GroupLayout.PREFERRED_SIZE,
-																58,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																button_4,
-																GroupLayout.PREFERRED_SIZE,
-																58,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																button_5,
-																GroupLayout.PREFERRED_SIZE,
-																58,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																button_6,
-																GroupLayout.PREFERRED_SIZE,
-																50,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																button_2,
-																GroupLayout.PREFERRED_SIZE,
-																58,
-																GroupLayout.PREFERRED_SIZE))
-										.addContainerGap()));
-		this.panel_4.setLayout(this.gl_panel_4);
+		
+		this.gl_painel4 = extencao.parte4(painel4, botaoPlay, botaoPause, botaoStop, botaoAvancar, botaoPrint);
+	 
+		this.gl_painel1 = extencao.parte6(painel1, scrollPaneTabelaIndice);
+	
+		this.gl_painel2 = extencao.parte5(scrollPaneTabelaItemteste, painel2);
+		
+		this.contentpainel.setLayout(this.gl_contentpainel);
+		this.painel.setLayout(this.gl_painel);
+		this.painel1.setLayout(this.gl_painel1);
+		this.painel2.setLayout(this.gl_painel2);
+		
+		this.painel4.setLayout(this.gl_painel4);
 
-		this.gl_panel_1 = new GroupLayout(this.panel_1);
-		this.gl_panel_1.setHorizontalGroup(this.gl_panel_1.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				this.gl_panel_1
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(this.scrollPane,
-								GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
-						.addContainerGap()));
-		this.gl_panel_1.setVerticalGroup(this.gl_panel_1.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				this.gl_panel_1
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(this.scrollPane,
-								GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-						.addContainerGap()));
-		this.panel_1.setLayout(this.gl_panel_1);
-
-		this.gl_panel_2 = new GroupLayout(panel_2);
-		this.gl_panel_2.setHorizontalGroup(this.gl_panel_2.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				this.gl_panel_2
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(this.scrollPane_1,
-								GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-						.addContainerGap()));
-
-		this.gl_panel_2.setVerticalGroup(this.gl_panel_2.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				this.gl_panel_2
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(this.scrollPane_1,
-								GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-						.addContainerGap()));
-
-		this.panel_2.setLayout(this.gl_panel_2);
-		this.panel.setLayout(this.gl_panel);
-		this.contentPanel.setLayout(this.gl_contentPanel);
-
-		this.table.setDefaultEditor(Object.class, null);
-		this.table.addMouseListener(new MouseAdapter() {
+		this.tabelaItemteste.setDefaultEditor(Object.class, null);
+		this.tabelaItemteste.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 1) {
-					model_1 = edTabela.setValorTabela(TABELA, table.getModel()
-							.getValueAt(table.getSelectedRow(), 1).toString(),
+					modeloTabelaIndice = editaTabela.setValorTabela(TABELA, tabelaItemteste.getModel()
+							.getValueAt(tabelaItemteste.getSelectedRow(), 1).toString(),
 							false);
-					table_1.setModel(model_1);
+					tabelaIndice.setModel(modeloTabelaIndice);
 
-					for (int i = 0; i < model_1.getRowCount(); i++) {
-						for (int j = 0; j < table.getColumnCount(); j++) {
-							rendere.colorirCelula(i, j,
+					for (int i = 0; i < modeloTabelaIndice.getRowCount(); i++) {
+						for (int j = 0; j < tabelaItemteste.getColumnCount(); j++) {
+							colorirTabelaIndice.colorirCelula(i, j,
 									new Color(255, 255, 255));
 						}
 					}
@@ -479,10 +294,10 @@ public class Player extends JDialog {
 
 	private void setLinha(int linha) {
 
-		this.rendere.colorirCelula(linha, 1, new Color(202, 225, 255));
-		this.rendere.colorirCelula(linha, 0, new Color(202, 225, 255));
-		this.table_1.validate();
-		this.model_1.fireTableDataChanged();
+		this.colorirTabelaIndice.colorirCelula(linha, 1, new Color(202, 225, 255));
+		this.colorirTabelaIndice.colorirCelula(linha, 0, new Color(202, 225, 255));
+		this.tabelaIndice.validate();
+		this.modeloTabelaIndice.fireTableDataChanged();
 
 	}
 
@@ -492,7 +307,7 @@ public class Player extends JDialog {
 		if (txt != null) {
 			if (txt.contains("OK")) {
 				nomesCor = new Color(51, 204, 0);
-			} else if (txt.contains("Erro")) {
+			} else if (txt.contains(ERRO)) {
 				nomesCor = new Color(255, 0, 0);
 			} else {
 				nomesCor = new Color(0, 153, 255);
@@ -537,10 +352,10 @@ public class Player extends JDialog {
 	}
 
 	public JTable getTable() {
-		return this.table;
+		return this.tabelaItemteste;
 	}
 
-	Thread threadsss = new Thread(new Runnable() {
+	Thread threads = new Thread(new Runnable() {
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public void run() {
@@ -548,35 +363,35 @@ public class Player extends JDialog {
 
 				
 
-				for (int j = 0; j < table.getRowCount(); j++) {
+				for (int j = 0; j < tabelaItemteste.getRowCount(); j++) {
 
-					if (table.getValueAt(j, 0).toString().equals("true")) {
+					if (tabelaItemteste.getValueAt(j, 0).toString().equals("true")) {
 
-						model_1 = edTabela.setValorTabela(TABELA, table
+						modeloTabelaIndice = editaTabela.setValorTabela(TABELA, tabelaItemteste
 								.getModel().getValueAt(j, 1).toString(), false);
 
-						table_1.setModel(model_1);
+						tabelaIndice.setModel(modeloTabelaIndice);
 
-						for (int i = 0; i < model_1.getRowCount(); i++)
-							for (int c = 0; c < table.getColumnCount(); c++)
-								rendere.colorirCelula(i, c, new Color(255, 255,
+						for (int i = 0; i < modeloTabelaIndice.getRowCount(); i++)
+							for (int c = 0; c < tabelaItemteste.getColumnCount(); c++)
+								colorirTabelaIndice.colorirCelula(i, c, new Color(255, 255,
 										255));
 
-						String arquivo = table.getModel().getValueAt(j, 1)
+						String arquivo = tabelaItemteste.getModel().getValueAt(j, 1)
 								.toString();
 
-						String[] comandos = edTabela.getTab(TABELA, "User_"
-								+ arquivo + ".deb", 0);
+						String[] comandos = editaTabela.getTab(TABELA, INIT_ARQUIVO
+								+ arquivo + EXTENCAO, 0);
 
-						ArrayList[] alvo = edTabela.getAlvo(TABELA, "User_"
-								+ arquivo + ".deb", 1, VARIAVEL, 0);
+						ArrayList[] alvo = editaTabela.getAlvo(TABELA, INIT_ARQUIVO
+								+ arquivo + EXTENCAO, 1, ARQUIVOVARIAVEL, 0);
 
-						String[] alvo2 = edTabela.getTab(TABELA, "User_"
-								+ arquivo + ".deb", 1);
+						String[] alvo2 = editaTabela.getTab(TABELA, INIT_ARQUIVO
+								+ arquivo + EXTENCAO, 1);
 						
 						
-						String[] massaDados = edTabela.getTab(TABELA, "User_"
-								+ arquivo + ".deb", 2);
+						String[] massaDados = editaTabela.getTab(TABELA, INIT_ARQUIVO
+								+ arquivo + EXTENCAO, 2);
 
 						cls = Class.forName("com.selenium.JpSelenium");
 
@@ -587,7 +402,7 @@ public class Player extends JDialog {
 						for (int i = 0; i < tamanho; i++) {
 
 							if (getPare()) {
-								cls.getDeclaredMethod("tearDown").invoke(obj);
+								cls.getDeclaredMethod(TEARDOWN).invoke(obj);
 								execucao.stop();
 								i = tamanho++;
 								break;
@@ -613,11 +428,11 @@ public class Player extends JDialog {
 								Object valor = cls.getDeclaredMethod("testElemento", ArrayList.class).invoke(obj, alvo[i]);
 								setExption(i, valor, alvo2[i]);
 								
-								if (!valor.toString().equals("Erro"))
+								if (!valor.toString().equals(ERRO))
 									cls.getDeclaredMethod("testClique",String.class).invoke(obj,valor.toString());
 								else {
 									setExption(i, valor, alvo2[i]);
-									cls.getDeclaredMethod("tearDown").invoke(obj);
+									cls.getDeclaredMethod(TEARDOWN).invoke(obj);
 									execucao.stop();
 									break;
 								}
@@ -627,10 +442,10 @@ public class Player extends JDialog {
 								Object valor = cls.getDeclaredMethod("testElemento", ArrayList.class).invoke(obj, alvo[i]);
 								setExption(i,valor,alvo2[i]);
 
-								if (!valor.toString().equals("Erro"))
+								if (!valor.toString().equals(ERRO))
 									cls.getDeclaredMethod("testDigite",String.class, String.class).invoke(obj, valor.toString(), massaDados[i]);
 								else {
-									cls.getDeclaredMethod("tearDown").invoke(obj);
+									cls.getDeclaredMethod(TEARDOWN).invoke(obj);
 									execucao.stop();
 									break;
 								}
@@ -638,7 +453,7 @@ public class Player extends JDialog {
 							}
 
 							if (comandos[i].equals(combo.Combo[6])) {
-								cls.getDeclaredMethod("tearDown").invoke(obj);
+								cls.getDeclaredMethod(TEARDOWN).invoke(obj);
 								execucao.stop();
 							}
 							
@@ -655,31 +470,31 @@ public class Player extends JDialog {
 
 						}
 
-						if(getExeption().contains("Erro")){
-							rendere_1.colorirCelula(j, 0, new Color(255, 60, 21));
-							rendere_1.colorirCelula(j, 1, new Color(255, 60, 21));	
-							table.validate();
-							model.fireTableDataChanged();
+						if(getExeption().contains(ERRO)){
+							colorirTabelaItemteste.colorirCelula(j, 0, new Color(255, 60, 21));
+							colorirTabelaItemteste.colorirCelula(j, 1, new Color(255, 60, 21));	
+							tabelaItemteste.validate();
+							modeloTabelaItemteste.fireTableDataChanged();
 						}else{
-							rendere_1.colorirCelula(j, 0, new Color(0, 255, 51));
-							rendere_1.colorirCelula(j, 1, new Color(0, 255, 51));
-							table.validate();
-							model.fireTableDataChanged();
+							colorirTabelaItemteste.colorirCelula(j, 0, new Color(0, 255, 51));
+							colorirTabelaItemteste.colorirCelula(j, 1, new Color(0, 255, 51));
+							tabelaItemteste.validate();
+							modeloTabelaItemteste.fireTableDataChanged();
 						}
 						
-						table.setValueAt(false, j, 0);
+						tabelaItemteste.setValueAt(false, j, 0);
 						
 						String tempoExecucao = ":"+(int)(execucao.elapsedTime() % 60);
 
-						sUtil.gerarPDF(evidence, arquivo, "", getExeption(), "GoogleChrome",caminho, tempoExecucao);
+						sUtil.gerarPDF(evidence, arquivo, NULO, getExeption(), "GoogleChrome",caminho, tempoExecucao);
 
 					}
 				}
 
-				button_2.setEnabled(true);
-				button_4.setEnabled(false);
-				button_3.setEnabled(false);
-				button_5.setEnabled(false);
+				botaoPlay.setEnabled(true);
+				botaoStop.setEnabled(false);
+				botaoPause.setEnabled(false);
+				botaoAvancar.setEnabled(false);
 
 			} catch (SecurityException e) {
 				// TODO Auto-generated catch block
@@ -713,37 +528,37 @@ public class Player extends JDialog {
 
 	private void setExption(int linha, Object valor, String elemento) {
 
-		if (valor.toString().equals("Erro")) {
-			this.rendere.colorirCelula(linha, 2, new Color(255, 60, 21));
-			this.rendere.colorirCelula(linha, 1, new Color(202, 225, 255));
-			this.rendere.colorirCelula(linha, 0, new Color(202, 225, 255));
-			this.table_1.validate();
-			this.model_1.fireTableDataChanged();
+		if (valor.toString().equals(ERRO)) {
+			this.colorirTabelaIndice.colorirCelula(linha, 2, new Color(255, 60, 21));
+			this.colorirTabelaIndice.colorirCelula(linha, 1, new Color(202, 225, 255));
+			this.colorirTabelaIndice.colorirCelula(linha, 0, new Color(202, 225, 255));
+			this.tabelaIndice.validate();
+			this.modeloTabelaIndice.fireTableDataChanged();
 			this.execao = "Erro - "+elemento+" nao encontrado...";
 		} else {
-			this.rendere.colorirCelula(linha, 2, new Color(0, 255, 51));
-			this.rendere.colorirCelula(linha, 1, new Color(202, 225, 255));
-			this.rendere.colorirCelula(linha, 0, new Color(202, 225, 255));
-			this.table_1.validate();
-			this.model_1.fireTableDataChanged();
+			this.colorirTabelaIndice.colorirCelula(linha, 2, new Color(0, 255, 51));
+			this.colorirTabelaIndice.colorirCelula(linha, 1, new Color(202, 225, 255));
+			this.colorirTabelaIndice.colorirCelula(linha, 0, new Color(202, 225, 255));
+			this.tabelaIndice.validate();
+			this.modeloTabelaIndice.fireTableDataChanged();
 			this.execao = "Teste Realizado com sucesso...";
 		}
 	}
 	private void setExption1(int linha, Object valor) {
 
 		if (!valor.toString().equals("OK")) {
-			this.rendere.colorirCelula(linha, 2, new Color(255, 60, 21));
-			this.rendere.colorirCelula(linha, 1, new Color(202, 225, 255));
-			this.rendere.colorirCelula(linha, 0, new Color(202, 225, 255));
-			this.table_1.validate();
-			this.model_1.fireTableDataChanged();
+			this.colorirTabelaIndice.colorirCelula(linha, 2, new Color(255, 60, 21));
+			this.colorirTabelaIndice.colorirCelula(linha, 1, new Color(202, 225, 255));
+			this.colorirTabelaIndice.colorirCelula(linha, 0, new Color(202, 225, 255));
+			this.tabelaIndice.validate();
+			this.modeloTabelaIndice.fireTableDataChanged();
 			this.execao = "Erro - Item "+valor+" nao encontrado...";
 		} else {
-			this.rendere.colorirCelula(linha, 2, new Color(0, 255, 51));
-			this.rendere.colorirCelula(linha, 1, new Color(202, 225, 255));
-			this.rendere.colorirCelula(linha, 0, new Color(202, 225, 255));
-			this.table_1.validate();
-			this.model_1.fireTableDataChanged();
+			this.colorirTabelaIndice.colorirCelula(linha, 2, new Color(0, 255, 51));
+			this.colorirTabelaIndice.colorirCelula(linha, 1, new Color(202, 225, 255));
+			this.colorirTabelaIndice.colorirCelula(linha, 0, new Color(202, 225, 255));
+			this.tabelaIndice.validate();
+			this.modeloTabelaIndice.fireTableDataChanged();
 			this.execao = "Teste Realizado com sucesso...";
 		}
 	}

@@ -10,11 +10,13 @@ import java.util.Map;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
    
-@SuppressWarnings("serial")
+
 public class RendererCelula extends DefaultTableCellRenderer {  
-  
-    @SuppressWarnings("rawtypes")
-	private Map _cores = new HashMap();  
+    
+
+	private static final long serialVersionUID = 820340524596810581L;
+
+	private Map<Point, Color> _cores = new HashMap<Point, Color>();  
   
     private Point _tempCel = new Point(0, 0);  
   
@@ -38,15 +40,14 @@ public class RendererCelula extends DefaultTableCellRenderer {
         this._tempCel.x = row;  
         this._tempCel.y = column;  
         if (this._cores.containsKey(this._tempCel)) {  
-            c.setBackground((Color) this._cores.get(this._tempCel));  
+            c.setBackground(this._cores.get(this._tempCel));  
         } else {  
             c.setBackground(this._defaultBG);  
         }  
   
         return c;  
     }  
-  
-    @SuppressWarnings("unchecked")
+   
 	public void colorirCelula(int row, int col, Color cor) {  
         this._cores.put(new Point(row, col), cor);  
     }  

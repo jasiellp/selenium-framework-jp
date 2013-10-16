@@ -113,7 +113,7 @@ public class Main extends JDialog implements IFrame  {
 		
 		this.setModal(true);
 
-		this.setIconImage(new  ImageIcon((propriedades.leitor("iconeprincipal"))).getImage());
+		this.setIconImage(new  ImageIcon(propriedades.leitor("iconeprincipal")).getImage());
 		
 		this.setBounds(100, 100, 745, 664);
 		

@@ -31,52 +31,55 @@ public class EditaTabela extends ISelenium implements IFrame  {
 	private  Editor editor;
 	
 	
-	public  DefaultTableModel setValorTabela(String caminho,String id, final boolean editable) {
+	public DefaultTableModel setValorTabela(String caminho,String id, final boolean editable) {
  	
-		model = new DefaultTableModel(new Object [][] {},    
-			     new String [] {"COMANDO","ALVO","VALOR"}){
-			     
+		this.model = new DefaultTableModel(new Object [][] {}, new String [] {COMANDO,ALVO,VALOR})
+		{
+			
 					@SuppressWarnings("unused")
-					boolean[] canEdit = new boolean []{
+					boolean[] canEdit = new boolean []
+					{
 			             false, false
-			         };    
+			        };    
 			      
-					   public boolean isCellEditable(int r, int c) {
+					public boolean isCellEditable(int r, int c) 
+					{
 					        return editable;
-					 }
+					}
 
 
-			            public static final long serialVersionUID = 1L;
-
+			        public static final long serialVersionUID = 1L;
 			 
-			            public Class<?> getColumnClass(int column) {
-			                switch (column) {
+			        public Class<?> getColumnClass(int column) 
+			        {
+			                switch (column) 
+			                {
 			                    case 0:
 			                        return String.class;
 			                    case 1:
 			                        return String.class;
-			                   
 			                    default:
 			                        return String.class;
 			                }
-			            }  
+			        }  
 			         
 			 };
 	 
 		
 		File dir = new File(caminho);
-		File arq = new File(dir, "User_" + id + ".deb");
+		File arq = new File(dir, INIT_ARQUIVO + id + EXTENCAO);
 
 		try {
-			if (arq.exists()) {
-				BufferedReader bufferedReader = new BufferedReader(
-						new FileReader(arq));
+			
+			if (arq.exists()) 
+			{
+				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
+				String linha = NULO;
 
-				String linha = "";
-
-				while ((linha = bufferedReader.readLine()) != null) {
+				while ((linha = bufferedReader.readLine()) != null) 
+				{
 					String dias[] = linha.split(Pattern.quote(SEPARADOR));
-					model.addRow(dias);
+					this.model.addRow(dias);
 				}
 
 				bufferedReader.close();
@@ -87,55 +90,64 @@ public class EditaTabela extends ISelenium implements IFrame  {
 		}
 		
 
-		return model;
+		return this.model;
 
 	}
-	
- 
-	public  String[] getTab(String caminho,String arquivo,int coluna) throws IOException {
+	 
+	public String[] getTab(String caminho,String arquivo,int coluna) throws IOException {
   
 		String[] vet = null;
 		File dir = new File(caminho);
 		File arq = new File(dir,  arquivo);
-		if(arq.exists()){
-		ArrayList<String> lista = new ArrayList<String>();
+		
+		if(arq.exists())
+		{
+				ArrayList<String> lista = new ArrayList<String>();
 		  
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 
-				String linha = "";
+				String linha = NULO;
 
-				while ((linha = bufferedReader.readLine()) != null) {
+				while ((linha = bufferedReader.readLine()) != null) 
+				{
 					String dias[] = linha.split(Pattern.quote(SEPARADOR));
 					lista.add(dias[coluna]);
-				} 
+				}
+				
 				bufferedReader.close();
 				
 				vet = new String[lista.size()];
 		 
-				for(int i = 0; i < lista.size(); i++)
-				vet[i]=lista.get(i);
+					for(int i = 0; i < lista.size(); i++)
+						vet[i]=lista.get(i);
 				 
 				return vet;
-		}else{
-			return  new String[]{""};
+        }
+		else
+		{
+			return new String[]{NULO};
 		} 
 
 	}
 	
-	public  ArrayList<String> getElemento(String caminho,String arquivo,int coluna, String elemento) throws IOException {
+	public ArrayList<String> getElemento(String caminho,String arquivo,int coluna, String elemento) throws IOException {
 	
 		ArrayList<String> vet = new ArrayList<String> ();
 		File dir = new File(caminho);
 		File arq = new File(dir,  arquivo);
-		if(arq.exists()){ 
+		if(arq.exists())
+		{
 		  
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 
-				String linha = "";
+				String linha = NULO;
 
-				while ((linha = bufferedReader.readLine()) != null) {
+				while ((linha = bufferedReader.readLine()) != null) 
+				{
 					String dias[] = linha.split(Pattern.quote(SEPARADOR));
-					if(dias[coluna].equals(elemento)){
+				
+					if(dias[coluna].equals(elemento))
+					{
 						 
 					for(int i = 0; i < dias.length; i++)
 						vet.add(dias[i]);
@@ -144,67 +156,82 @@ public class EditaTabela extends ISelenium implements IFrame  {
 					}
 					
 				} 
+				
 				bufferedReader.close();
 				  
 				return vet;
-		}else{
+		}
+		else
+		{
 			return  new ArrayList<String>();
 		} 
 	}
-	
-	
-	public  ArrayList<String>[] getAlvo(String caminho,String arquivo,int coluna,String caminho2,int coluna2) throws IOException {
+	 
+	@SuppressWarnings("unchecked")
+	public ArrayList<String>[] getAlvo(String caminho,String arquivo,int coluna,String caminho2,int coluna2) throws IOException {
 		  
-		ArrayList[] vet = null;
+		 
+		
+		ArrayList<String>[] vetors = null;
 		File dir = new File(caminho);
 		File arq = new File(dir,  arquivo);
-		if(arq.exists()){
-		ArrayList<String> lista = new ArrayList<String>();
+		
+		if(arq.exists())
+		{
+				ArrayList<String> lista = new ArrayList<String>();
 		  
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 
-				String linha = "";
+				String linha = NULO;
 
-				while ((linha = bufferedReader.readLine()) != null) {
+				while ((linha = bufferedReader.readLine()) != null) 
+				{
 					String dias[] = linha.split(Pattern.quote(SEPARADOR));
 					lista.add(dias[coluna]);
 				} 
+				
 				bufferedReader.close();
 				
-				vet = new ArrayList[lista.size()];
+				vetors = new ArrayList[lista.size()];
 		 
-				for(int i = 0; i < lista.size(); i++){
+				for(int i = 0; i < lista.size(); i++)
+				{
 				  
 				String dias[] = lista.get(i).split(Pattern.quote("-->"));
-				vet[i]=getElemento(caminho2, "User_"+dias[0]+".deb", coluna2, dias[1]);
+				vetors[i]=getElemento(caminho2, INIT_ARQUIVO+dias[0]+EXTENCAO, coluna2, dias[1]);
 				 
 				}
-				return vet;
-		}else{
+				return vetors;
+		}
+		else
+		{
 			return  new ArrayList[]{};
 		} 
 
-	}
-	
+	} 
+	  
 	@SuppressWarnings("serial")
-	public  DefaultTableModel setValorTabelaVariavel(String caminho, String id, final boolean editable, int coluna) {
+	public DefaultTableModel setValorTabelaVariavel(String caminho, String id, final boolean editable, int coluna) {
 	 
-		//coluna++;
+		 
 		String [] s = new String[coluna];
 		s[0] = "NOME VARIAVEL";
 		
 		for(int i = 1; i < s.length ; i++)
-			s[i] = "VARIAVEL";
+			s[i] = VARIAVEL1;
 		
 		
-		model = new DefaultTableModel(new Object [][] {},s){
+		this.model = new DefaultTableModel(new Object [][] {},s)
+		{
 			     
 					@SuppressWarnings("unused")
-					boolean[] canEdit = new boolean []{
+					boolean[] canEdit = new boolean []
+				    {
 			             false, false
-			         };    
+			        };    
 			      
-					   public boolean isCellEditable(int r, int c) {
+					 public boolean isCellEditable(int r, int c) 
+					 {
 					        return editable;
 					 }
 			         
@@ -212,18 +239,19 @@ public class EditaTabela extends ISelenium implements IFrame  {
 	 
 		
 		File dir = new File(caminho);
-		File arq = new File(dir, "User_" + id + ".deb");
+		File arq = new File(dir, INIT_ARQUIVO + id + EXTENCAO);
 
 		try {
-			if (arq.exists()) {
-				BufferedReader bufferedReader = new BufferedReader(
-						new FileReader(arq));
+			if (arq.exists()) 
+			{
+				BufferedReader bufferedReader = new BufferedReader( new FileReader(arq));
 
-				String linha = "";
+				String linha = NULO;
 
-				while ((linha = bufferedReader.readLine()) != null) {
+				while ((linha = bufferedReader.readLine()) != null) 
+				{
 					String dias[] = linha.split(Pattern.quote(SEPARADOR));
-					model.addRow(dias);
+					this.model.addRow(dias);
 				}
 
 				bufferedReader.close();
@@ -233,30 +261,33 @@ public class EditaTabela extends ISelenium implements IFrame  {
 			e.printStackTrace();
 		}
 	
-		return model;
+		return this.model;
 
 	}
 	  
 	@SuppressWarnings("serial")
 	public  DefaultTableModel indiceBoolean() {
 
-		model = new DefaultTableModel(   
-	     new Object [][] { },    
-	     new String [] {"STATUS","SWITCH","ID"}){
-	   
+		 this.model = new DefaultTableModel(new Object [][] { }, new String [] {STATUS,SWITCH,ID})
+		 {
 	        @SuppressWarnings("unused")
-			boolean[] canEdit = new boolean []{
+			boolean[] canEdit = new boolean []
+			{
 	             false, false
-	         };    
+	        };    
 	      
 	         @Override  
-	         public boolean isCellEditable(int rowIndex, int columnIndex) {
+	         public boolean isCellEditable(int rowIndex, int columnIndex) 
+	         {
 	             return (columnIndex == 0);  
 	         }  
 	         
 			@Override
-			public Class<?> getColumnClass(int column) {
-				switch (column) {
+			public Class<?> getColumnClass(int column) 
+			{
+				switch (column) 
+				{
+			
 				case 0:
 					return Boolean.class;
 				case 1:
@@ -267,51 +298,63 @@ public class EditaTabela extends ISelenium implements IFrame  {
 				return null;
 			}
 	 };
-		 
-
-		File dir = new File("properties\\value\\");
-		File arq = new File(dir, "Idate.deb");
+		  
+		
+		File arq = new File(INDICE);
 
 		try {
-			if (arq.exists()) {
-				BufferedReader bufferedReader = new BufferedReader(
-						new FileReader(arq));
+			
+			if (arq.exists()) 
+			{
+				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 
-				String linha = "";
+				String linha = NULO;
 
-				while ((linha = bufferedReader.readLine()) != null) {
+				while ((linha = bufferedReader.readLine()) != null)
+				{
 
-					model.addRow(new Object[] {
+					this.model.addRow(new Object[] 
+							{
 							false,
-							linha.split(Pattern.quote(SEPARADOR))[0],linha.split(Pattern.quote(SEPARADOR))[1] });
+							linha.split(Pattern.quote(SEPARADOR))[0],linha.split(Pattern.quote(SEPARADOR))[1] 
+							 });
 				}
 
 				bufferedReader.close();
 			} else
+			{
 				new FileWriter(arq, true);
+			}
+				
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		return model;
+		return this.model;
 
 	}
 	 
 	@SuppressWarnings("serial")
-	public  DefaultTableModel indice(String arquivo) {
+	public  DefaultTableModel indice(String arquivo) 
+	{
 
-		model = new DefaultTableModel(
-	     new Object [][] { },    
-	     new String [] {"SWITCH", "ID","NUM"}){
+		this.model = new DefaultTableModel(
+	    
+				new Object [][] { },    
+	     
+				new String [] {SWITCH, ID, NUM})
+		{
 	   
-	         boolean[] canEdit = new boolean []{    
+	         boolean[] canEdit = new boolean []
+	         {    
 	             false, false, false, false, false
 	         };    
 	      
 	         @Override    
-	         public boolean isCellEditable(int rowIndex, int columnIndex) {    
-	             return canEdit [columnIndex];    
+	         public boolean isCellEditable(int rowIndex, int columnIndex) 
+	         {    
+	             return this.canEdit [columnIndex];    
 	         }  
 	 };
 		  
@@ -319,81 +362,93 @@ public class EditaTabela extends ISelenium implements IFrame  {
 		File arq = new File(arquivo);
 
 		try {
-			if (arq.exists()) {
+			
+			if (arq.exists()) 
+			{
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 
-				String linha = "";
+				String linha = NULO;
 
-				while ((linha = bufferedReader.readLine()) != null) {
-
-					model.addRow(linha.split(Pattern.quote(SEPARADOR)));
+				while((linha = bufferedReader.readLine()) != null) 
+				{
+					this.model.addRow(linha.split(Pattern.quote(SEPARADOR)));
 				}
 
 				bufferedReader.close();
-			} else
+				
+			} 
+			else
+			{
 				new FileWriter(arq, true);
-
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		return model;
+		return this.model;
 
 	}
 
-	public  void alterar(String caminho,String arquivo,String id, String nome,String NumCol,String list) throws IOException {
+	public void alterar(String caminho,String arquivo,String id, String nome,String NumCol,String list) throws IOException {
  
 		
 		this.editor = new Editor();
+		
 		File arq = new File(new File(caminho), arquivo);
+		
 		StringBuffer novo = new StringBuffer();
+		
 		try {
-			if (arq.exists()) {
+			if (arq.exists()) 
+			{
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
+			
+				String linha = NULO;
 				
-
-				String linha = "";
-				String linha1 = "";
-				boolean test = true;
-				
+				String linha1 = NULO;
 				
 				ArrayList<String> lista = new ArrayList<String>();
 
-				while ((linha = bufferedReader.readLine()) != null){
+				while ((linha = bufferedReader.readLine()) != null)
+				{
 					lista.add(linha);
-				 
 				}
+				
 				bufferedReader.close();
-				  
-			 
-	        	   PrintWriter printWriter = new PrintWriter(new FileWriter(arq, false));
-	            for (int i = 0; i < lista.size(); i++) {
-	            	
+				   
+				PrintWriter printWriter = new PrintWriter(new FileWriter(arq, false));
+	            
+				for (int i = 0; i < lista.size(); i++) 
+				{	
 					linha1 = lista.get(i);
 				  	
 					if (linha1.split(Pattern.quote(SEPARADOR))[1].equals(id))
 					{
-						novo.append(nome).append(SEPARADOR).append(id).append(SEPARADOR).append(list).append("\n");
+						novo.append(nome).append(SEPARADOR).append(id).append(SEPARADOR).append(list).append(N);
 						 
 						printWriter.print(novo.toString());
 						  
-						if(new File(caminho+"User_"+linha1.split(Pattern.quote(SEPARADOR))[0]+".deb").exists())
-							copyFile(new File(caminho+"User_"+linha1.split(Pattern.quote(SEPARADOR))[0]+".deb"), new File(caminho+"User_"+nome+".deb"));
-						
-						
+						if(new File(caminho+INIT_ARQUIVO+linha1.split(Pattern.quote(SEPARADOR))[0]+EXTENCAO).exists())
+							copyFile(new File(caminho+INIT_ARQUIVO+linha1.split(Pattern.quote(SEPARADOR))[0]+EXTENCAO), new File(caminho+INIT_ARQUIVO+nome+EXTENCAO));
+						 
 					} 
 					else
-						printWriter.print(linha1+"\n");
+					{
+						printWriter.print(linha1+N);
+					}
 				}
 
 				 printWriter.flush();
 		         printWriter.close();
-		         editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
+		         this.editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
 	            
 				
-			} else
+			} 
+			else
+			{
 				new FileWriter(arq, true).close();
-
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -412,19 +467,20 @@ public class EditaTabela extends ISelenium implements IFrame  {
 		
 		
 		try {
-			if (arq.exists()) {
+			if (arq.exists()) 
+			{
+				
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 				
-
-				String linha = "";
-				String linha1 = "";
+				String linha = NULO;
+			
 				boolean itemRepetido = true;
 				
 				
 				ArrayList<String> lista = new ArrayList<String>();
 
-				while ((linha = bufferedReader.readLine()) != null){
-					
+				while ((linha = bufferedReader.readLine()) != null)
+				{
 					lista.add(linha);
 				
 					if(linha.split(Pattern.quote(SEPARADOR))[0].equals(nome))
@@ -434,17 +490,18 @@ public class EditaTabela extends ISelenium implements IFrame  {
 				bufferedReader.close();
 				  
 				
-	           if(itemRepetido){
+	           if(itemRepetido)
+	           {
 	        	   
 	        	   PrintWriter printWriter = new PrintWriter(new FileWriter(arq, false));
 	            
 	        	   for (int i = 0; i < lista.size(); i++) 
-				  	   printWriter.print(lista.get(i)+"\n");
+				  	   printWriter.print(lista.get(i)+N);
 				
 	        	 
 	        	 novo.append(nome).append(SEPARE2);
 	       	     novo.append((lista.size()+1));
-	       		 novo.append(SEPARE2).append(itemlista).append(" \n");
+	       		 novo.append(SEPARE2).append(itemlista).append(N);
 	        
 	       		 printWriter.print(novo.toString());
 				 
@@ -454,13 +511,16 @@ public class EditaTabela extends ISelenium implements IFrame  {
 		          
 	       		 editor.setMensagemLabel(2,nome+" Criado Com sucesso");	
 	           }
-	           else{
+	           else
+	           {
 	        	   editor.setMensagemLabel(1,"Nome "+nome+" Já existe !!!");	
 	           }
 				
-			} else
+			}
+			else
+			{
 				new FileWriter(arq, true).close();
-
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -469,58 +529,80 @@ public class EditaTabela extends ISelenium implements IFrame  {
 	
 	
 	public  void alt(String caminho,String arquivo,String id, String nome,String NumCol) throws IOException {
+		
 		this.editor = new Editor();
+		
 		File arq = new File(new File(caminho), arquivo);
+		
 		StringBuffer novo = new StringBuffer();
+		
 		try {
-			if (arq.exists()) {
+			if (arq.exists()) 
+			{
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
+			
+				String linha = NULO;
+			
+				String linha1 = NULO;
 				
-
-				String linha = "";
-				String linha1 = "";
 				boolean test = true;
-				
 				
 				ArrayList<String> lista = new ArrayList<String>();
 
-				while ((linha = bufferedReader.readLine()) != null){
+				while ((linha = bufferedReader.readLine()) != null)
+				{
 					lista.add(linha);
-				if(linha.split(Pattern.quote(SEPARADOR))[0].equals(nome))
-					test = false;
+				
+					if(linha.split(Pattern.quote(SEPARADOR))[0].equals(nome))
+							test = false;
 				}
+				
 				bufferedReader.close();
 				  
 				
-	           if(test){
+	           if(test)
+	           {
 	        	   PrintWriter printWriter = new PrintWriter(new FileWriter(arq, false));
-	            for (int i = 0; i < lista.size(); i++) {
+	           
+	        	   for (int i = 0; i < lista.size(); i++) 
+	        	   {
 	            	
 					linha1 = lista.get(i);
 				  	
-					if (linha1.split(Pattern.quote(SEPARADOR))[1].equals(id)){
-						novo.append(nome).append(SEPARADOR).append(id).append(SEPARADOR).append(NumCol).append("\n");
+					if (linha1.split(Pattern.quote(SEPARADOR))[1].equals(id))
+					{
+						novo.append(nome).append(SEPARADOR).append(id).append(SEPARADOR).append(NumCol).append(N);
 						 
 						printWriter.print(novo.toString());
 						  
-						if(new File(caminho+"User_"+linha1.split(Pattern.quote(SEPARADOR))[0]+".deb").exists()){
-							copyFile(new File(caminho+"User_"+linha1.split(Pattern.quote(SEPARADOR))[0]+".deb"), new File(caminho+"User_"+nome+".deb"));
+						if(new File(caminho+INIT_ARQUIVO+linha1.split(Pattern.quote(SEPARADOR))[0]+EXTENCAO).exists())
+						{
+							copyFile(new File(caminho+INIT_ARQUIVO+linha1.split(Pattern.quote(SEPARADOR))[0]+EXTENCAO), new File(caminho+INIT_ARQUIVO+nome+EXTENCAO));
 						}
 						
-					} else
-						printWriter.print(linha1+"\n");
+					} 
+					else
+					{
+						printWriter.print(linha1+N);
+					}
 				}
 
 				 printWriter.flush();
-		         printWriter.close();
-		         editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
+		         
+				 printWriter.close();
+		         
+				 this.editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
 	           }
-	           else{
+	           else
+	           {
 	        		editor.setMensagemLabel(1,"Nome "+nome+" Já existe !!!");	
 	           }
 				
-			} else
+			} 
+			else
+			{
 				new FileWriter(arq, true).close();
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -529,25 +611,28 @@ public class EditaTabela extends ISelenium implements IFrame  {
 	}
 	
 	public  void alterara(String caminho,String arquivo,String id, String nome,String NumCol,String list) throws IOException {
+	
 		this.editor = new Editor();
+		
 		File arq = new File(new File(caminho), arquivo);
+		
 		StringBuffer novo = new StringBuffer();
 		
 		try {
 			 
-			if (arq.exists()) {
+			if (arq.exists()) 
+			{
 				
 				BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
+			
+				String linha = NULO;
 				
-
-				String linha = "";
-				String linha1 = "";
-			 
-				
-				
+				String linha1 = NULO;
+			 	
 				ArrayList<String> lista = new ArrayList<String>();
 
-				while ((linha = bufferedReader.readLine()) != null){
+				while ((linha = bufferedReader.readLine()) != null)
+				{
 					lista.add(linha); 
 				}
 				bufferedReader.close();
@@ -555,27 +640,34 @@ public class EditaTabela extends ISelenium implements IFrame  {
 				
 				PrintWriter printWriter = new PrintWriter(new FileWriter(arq, false));
 	            
-				for (int i = 0; i < lista.size(); i++) {
+				for (int i = 0; i < lista.size(); i++) 
+				{
 	            	
 					linha1 = lista.get(i);
-				   
 				  	
-					if (linha1.split(Pattern.quote(SEPARADOR))[i].equals(nome)){
-						novo.append(nome).append(SEPARADOR).append(id).append(SEPARADOR).append(list).append("\n");
+					if (linha1.split(Pattern.quote(SEPARADOR))[i].equals(nome))
+					{
+						novo.append(nome).append(SEPARADOR).append(id).append(SEPARADOR).append(list).append(N);
 						System.out.println("Aqui "+novo.toString());
 						printWriter.print(novo.toString());
 												
 					} else
-						printWriter.print(linha1+"\n");
+					{
+						printWriter.print(linha1+N);
+					}
 				}
 
 				 printWriter.flush();
-		         printWriter.close();
-		         editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
+		         
+				 printWriter.close();
+		         
+				 editor.setMensagemLabel(2,nome+" Alterado Com sucesso");	
 	           
 				
 			} else
+			{
 				new FileWriter(arq, true).close();
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -587,6 +679,7 @@ public class EditaTabela extends ISelenium implements IFrame  {
       
 
         FileChannel sourceChannel = null;
+        
         FileChannel destinationChannel = null;
 
         try {
@@ -594,11 +687,14 @@ public class EditaTabela extends ISelenium implements IFrame  {
             destinationChannel = new FileOutputStream(destination).getChannel();
             sourceChannel.transferTo(0, sourceChannel.size(),destinationChannel);
     
-        } finally {
+        } finally 
+        {
             if (sourceChannel != null && sourceChannel.isOpen())
                 sourceChannel.close();
+            
             if (destinationChannel != null && destinationChannel.isOpen())
                 destinationChannel.close();
+            
             source.delete();
        }
    }
@@ -608,32 +704,37 @@ public class EditaTabela extends ISelenium implements IFrame  {
 		File arq = new File(arquivo);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 
-		String linha = "";
+		String linha = NULO;
 
 		boolean test = true;
 
-		while ((linha = bufferedReader.readLine()) != null) {
+		while ((linha = bufferedReader.readLine()) != null) 
+		{
 
 			if (linha.split(Pattern.quote(SEPARADOR))[0].equals(nome))
 				test = false;
 		}
+		
 		bufferedReader.close();
 
 		return test;
 	}
     
-	public  void deleta(String caminho,String arquivo, String id, String nome, String caminho2,String arquivo2) {
+	public void deleta(String caminho,String arquivo, String id, String nome, String caminho2,String arquivo2) {
 
 		File arq = new File(new File(caminho), arquivo);
 		StringBuffer novo = new StringBuffer();
 		try {
-			if (arq.exists()) {
-				if(caminho2 == null && arquivo2 == null){
+			if (arq.exists()) 
+			{
+				
+				if(caminho2 == null && arquivo2 == null)
+				{
 					BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 
-					String linha = "";
-					String linha1 = "";
-
+					String linha = NULO;
+				
+					String linha1 = NULO;
 					 
 					ArrayList<String> lista = new ArrayList<String>();
 
@@ -644,22 +745,23 @@ public class EditaTabela extends ISelenium implements IFrame  {
 
 					PrintWriter printWriter = new PrintWriter(new FileWriter(arq,false));
 					
-					for (int i = 0; i < lista.size(); i++) {
+					for (int i = 0; i < lista.size(); i++) 
+					{
 
 						linha1 = lista.get(i);
 
-						if (linha1.split(Pattern.quote(SEPARADOR))[1].equals(id)) {
+						if (linha1.split(Pattern.quote(SEPARADOR))[1].equals(id))
+						{
 	  
-							if (new File(caminho+"User_"
-									+ linha1.split(Pattern.quote(SEPARADOR))[0]
-									+ ".deb").exists())
-								new File(caminho+"User_"
-										+ linha1.split(Pattern.quote(SEPARADOR))[0]
-										+ ".deb").delete();
+							if (new File(caminho+INIT_ARQUIVO+linha1.split(Pattern.quote(SEPARADOR))[0]+EXTENCAO).exists())
+							{
+								new File(caminho+INIT_ARQUIVO+linha1.split(Pattern.quote(SEPARADOR))[0]+EXTENCAO).delete();
+							}
 
 						} else
-							printWriter.print(linha1 + "\n");
-
+						{
+							printWriter.print(linha1 + N);
+						}
 						 
 						novo.delete(0, novo.length());
 					}
@@ -667,28 +769,36 @@ public class EditaTabela extends ISelenium implements IFrame  {
 					printWriter.flush();
 					printWriter.close();
 					 
-				}else{
+				}
+				else
+				{
 					BufferedReader buff = new BufferedReader(new FileReader(new File(new File(caminho2), arquivo2)));
 					
-					String linh = "";
+					String linh = NULO;
+				
 					ArrayList<String> li = new ArrayList<String>();
 
-					while ((linh = buff.readLine()) != null){
-							li.add(linh.replace(nome+"|||", "k1k1k1|||"));
+					while ((linh = buff.readLine()) != null)
+					{
+							li.add(linh.replace(nome+SEPARE0, SEPARE1));
 					}
+					
 					buff.close();
 					
 					PrintWriter pw = new PrintWriter(new FileWriter(new File(new File(caminho2), arquivo2)),false);
+					
 					for (int i = 0; i < li.size(); i++) 
-						pw.print(li.get(i) + "\n");
+						pw.print(li.get(i) + N);
 					
 					pw.flush();
+					
 					pw.close();
 					
 					BufferedReader bufferedReader = new BufferedReader(new FileReader(arq));
 
-					String linha = "";
-					String linha1 = "";
+					String linha = NULO;
+					
+					String linha1 = NULO;
 
 					 
 					ArrayList<String> lista = new ArrayList<String>();
@@ -700,22 +810,26 @@ public class EditaTabela extends ISelenium implements IFrame  {
 
 					PrintWriter printWriter = new PrintWriter(new FileWriter(arq,false));
 					
-					for (int i = 0; i < lista.size(); i++) {
+					for (int i = 0; i < lista.size(); i++) 
+					{
 
 						linha1 = lista.get(i);
 
-						if (linha1.split(Pattern.quote(SEPARADOR))[1].equals(id)) {
+						if (linha1.split(Pattern.quote(SEPARADOR))[1].equals(id)) 
+						{
 	  
-							if (new File(caminho+"User_"
+							if (new File(caminho+INIT_ARQUIVO
 									+ linha1.split(Pattern.quote(SEPARADOR))[0]
-									+ ".deb").exists())
-								new File(caminho+"User_"
+									+ EXTENCAO).exists())
+								new File(caminho+INIT_ARQUIVO
 										+ linha1.split(Pattern.quote(SEPARADOR))[0]
-										+ ".deb").delete();
+										+ EXTENCAO).delete();
 
-						} else
-							printWriter.print(linha1 + "\n");
-
+						} 
+						else
+						{
+							printWriter.print(linha1 + N);
+						}
 						 
 						novo.delete(0, novo.length());
 					}
@@ -724,8 +838,11 @@ public class EditaTabela extends ISelenium implements IFrame  {
 					printWriter.close();
 				}
 
-			} else
+			} 
+			else
+			{
 				new FileWriter(arq, true);
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -733,8 +850,10 @@ public class EditaTabela extends ISelenium implements IFrame  {
 
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public  void setCombo( TableColumn sportColumn, Object[] vet) {
 
+		@SuppressWarnings("unchecked")
 		final JComboBox comboBox = new JComboBox(vet);
 
 		sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
@@ -742,27 +861,32 @@ public class EditaTabela extends ISelenium implements IFrame  {
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 		renderer.setToolTipText("Click for combo box");
 		sportColumn.setCellRenderer(renderer);
-		comboBox.addItemListener(new ItemListener() {
-		        public void itemStateChanged(ItemEvent arg0) {
+		comboBox.addItemListener(new ItemListener() 
+		{
+		        public void itemStateChanged(ItemEvent arg0) 
+		        {
 		            System.out.println("comboBox--> "+comboBox.getSelectedItem());
 		             
 		        }
 		    });
 		
 	}
-
+	@SuppressWarnings("rawtypes")
 	public  void setComboAr(TableColumn sportColumn, ArrayList<String[]> ss,ArrayList<String> s) {
+	
 		ArrayList<String> aa = new ArrayList<String>();
 		 
-		aa.add("");
-		for (int i = 0; i < ss.size(); i++){
-			
-			for (int j = 0; j < ss.get(i).length; j++){
+		aa.add(NULO);
+		
+		for (int i = 0; i < ss.size(); i++)
+		{	
+			for (int j = 0; j < ss.get(i).length; j++)
+			{
 				aa.add(s.get(i)+"-->"+ss.get(i)[j]);
 			}
 		}
 		
-		
+		@SuppressWarnings("unchecked")
 		final JComboBox comboBox = new JComboBox(aa.toArray());
 
 		sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
@@ -770,19 +894,22 @@ public class EditaTabela extends ISelenium implements IFrame  {
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 		renderer.setToolTipText("Click for combo box");
 		sportColumn.setCellRenderer(renderer);
-		comboBox.addItemListener(new ItemListener() {
-		        public void itemStateChanged(ItemEvent arg0) {
+		comboBox.addItemListener(new ItemListener() 
+		{
+		        public void itemStateChanged(ItemEvent arg0) 
+		        {
 		            System.out.println("comboBox--> "+comboBox.getSelectedItem());
 		             
 		        }
-		    });
+		});
 		
 	}
 	
-	public  void ocultaColuna(JTable tablej, int coluna) {
+	public  void ocultaColuna(JTable tablej, int coluna) 
+	{
 			tablej.getColumnModel().getColumn(coluna).setMinWidth(0);
 			tablej.getColumnModel().getColumn(coluna).setPreferredWidth(0);
 			tablej.getColumnModel().getColumn(coluna).setMaxWidth(0);
-		}
+	}
 
 }
