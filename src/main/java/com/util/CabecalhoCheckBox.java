@@ -15,6 +15,8 @@ import javax.swing.table.TableColumnModel;
 
 public class CabecalhoCheckBox extends JCheckBox implements TableCellRenderer, MouseListener {
 
+ 
+	private static final long serialVersionUID = -7599033844049083790L;
 	protected CabecalhoCheckBox rendererComponent;
 	protected int column;
 	protected boolean mousePressed = false;

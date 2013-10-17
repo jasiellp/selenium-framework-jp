@@ -23,6 +23,7 @@ import javax.swing.border.TitledBorder;
 import com.core.Main;
 import com.inter.IFrame;
 import com.util.EditaTabela;
+import com.util.JPBotao;
 
 public class Editor extends JDialog implements IFrame  {
 
@@ -110,11 +111,14 @@ public class Editor extends JDialog implements IFrame  {
 		painel_2 = new JPanel();
 		leganda2 = new JLabel(NULO);
 		legenda1 = new JLabel();
+		
+		 
 		botaoExcluir = new JButton(new ImageIcon(propriedades.leitor("iconelixeira")));
-		botaoCancelar = new JButton(new ImageIcon(propriedades.leitor("iconesair")));
+		botaoCancelar =  new JPBotao(Color.WHITE, propriedades.leitor("iconesair"));
 		botaoOk = new JButton(new ImageIcon(propriedades.leitor("iconeok")));
 		botaoAdd = new JButton(new ImageIcon(propriedades.leitor("iconenext")));
 		botaoRemove = new JButton(new ImageIcon(propriedades.leitor("iconeback")));
+		
 		painel1.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		campoNome.setColumns(10);

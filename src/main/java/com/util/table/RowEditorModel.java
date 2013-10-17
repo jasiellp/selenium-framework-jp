@@ -1,15 +1,16 @@
 package com.util.table;
 
  import javax.swing.table.*;
- import java.util.*;
+
+import java.util.*;
 
  
  public class RowEditorModel
  {
-      private Hashtable data;
+      private Hashtable<Integer, TableCellEditor> data;
       public RowEditorModel()
       {
-          data = new Hashtable();
+          data = new Hashtable<Integer, TableCellEditor>();
       }
      public void addEditorForRow(int row, TableCellEditor e )
      {

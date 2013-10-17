@@ -23,11 +23,19 @@ public interface IFrame {
 	
 	public final String SEPARE2 = propriedades.leitor("separe002");
 	
+	public final String ARQUIVO_VARIAVEL = propriedades.leitor("arquivoivariaveis");
+	
+	public final String CAMINHO_VARIAVEL = propriedades.leitor("caminhovariavel");
+	
 	public final String VARIAVEL = propriedades.leitor("variavel");
 	
 	public final String ARQUIVOVARIAVEL = propriedades.leitor("arquivovariavel");
 	
-	public final String INDICE = propriedades.leitor("indice");	
+	
+	
+	public final String ARQUIVO_INDICE = propriedades.leitor("arquivoindice");
+	
+	public final String INDICE = propriedades.leitor("indice");
 	
 	public final String TABELA =  propriedades.leitor("tela");
 	

@@ -1,7 +1,6 @@
 package com.util;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.lowagie.text.Chunk;
@@ -12,7 +11,6 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfWriter;
-import com.thoughtworks.selenium.Selenium;
 
 public class SeleniumUtil {
 

@@ -1,8 +1,5 @@
 package com.core;
 
-import java.awt.Color;
-import java.util.ArrayList;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -153,14 +150,7 @@ public class MainExtencaoLayout {
 		return this.gl_panel_2;
 	}
 
-	public void setCorBotao(ArrayList<JButton> botoes,Color cor){
-			
-		for(int i = 0; i < botoes.size(); i++)
-		{
-				botoes.get(i).setBackground(cor);
-		}
-	}
-
+ 
 	public void mensagemDialogo(String mensagem, String logo, int tipo){
 		JOptionPane.showMessageDialog(new JFrame(), mensagem, logo, tipo);
 	}

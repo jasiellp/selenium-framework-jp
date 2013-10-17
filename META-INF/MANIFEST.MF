@@ -1,11 +1,10 @@
-Manifest-Version: 1.0
+Manifest-Version: 1.6
 Bundle-ManifestVersion: 2
 Bundle-Name: automacao
 Bundle-SymbolicName: automacao
 Bundle-Version: 1.0.0.qualifier
 Export-Package: com.core,
  com.core.painel, 
- com.image,
  com.inter,
  com.menu,
  com.player,

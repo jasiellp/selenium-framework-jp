@@ -31,6 +31,7 @@ import com.util.Chronometer;
 import com.util.EditaTabela;
 import com.util.ImagemUtil;
 import com.util.ItemCabecalho;
+import com.util.JPBotao;
 import com.util.RendererCelula;
 import com.util.SeleniumUtil;
 
@@ -48,6 +49,7 @@ public class Player extends JDialog implements IFrame{
 	private GroupLayout gl_painel;
 	private GroupLayout gl_painel1;
 	private GroupLayout gl_painel2;
+	@SuppressWarnings("unused")
 	private GroupLayout gl_painel3;
 	private GroupLayout gl_painel4;
 	
@@ -167,21 +169,17 @@ public class Player extends JDialog implements IFrame{
 		
 		this.painel4 = new JPanel();
 		
-		this.botaoSair = new JButton(new ImageIcon(propriedades.leitor("iconesair")));
-		this.botaoPlay = new JButton(new ImageIcon(propriedades.leitor("iconeplay")));
-		this.botaoPause = new JButton(new ImageIcon(propriedades.leitor("iconepause")));
-		this.botaoStop = new JButton(new ImageIcon(propriedades.leitor("iconestop")));
-		this.botaoAvancar = new JButton(new ImageIcon(propriedades.leitor("iconeavanca")));
-		this.botaoPrint = new JButton(new ImageIcon(propriedades.leitor("iconeprint")));
-		
-		this.botaoSair.setBackground(Color.WHITE);
-		this.botaoPlay.setBackground(Color.WHITE); 
-		this.botaoPause.setBackground(Color.WHITE);
-		this.botaoStop.setBackground(Color.WHITE);
-		this.botaoAvancar.setBackground(Color.WHITE);
-		this.botaoPrint.setBackground(Color.WHITE);
+	
 		
 		
+		this.botaoSair = new JPBotao(Color.WHITE, propriedades.leitor("iconesair"));
+		this.botaoPlay = new JPBotao(Color.WHITE, propriedades.leitor("iconeplay"));
+		this.botaoPause = new JPBotao(Color.WHITE, propriedades.leitor("iconepause"));
+		this.botaoStop = new JPBotao(Color.WHITE, propriedades.leitor("iconestop"));
+		this.botaoAvancar = new JPBotao(Color.WHITE,propriedades.leitor("iconeavanca"));
+		this.botaoPrint = new JPBotao(Color.WHITE, propriedades.leitor("iconeprint"));
+		
+	 
 		
 		
 		this.gl_contentpainel = extencao.parte1(contentpainel, painel);

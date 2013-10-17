@@ -15,7 +15,9 @@ import com.util.SeleniumUtil;
 public class JpSelenium  extends TestCase{
 	 
 	private Selenium selenium;
+	@SuppressWarnings("unused")
 	private SeleniumUtil sUtil;
+	@SuppressWarnings("unused")
 	private ImagemUtil img; 
 	private String comando;
 	

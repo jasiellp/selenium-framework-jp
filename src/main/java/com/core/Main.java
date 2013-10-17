@@ -29,6 +29,7 @@ import com.inter.ICombo;
 import com.inter.IFrame;
 import com.util.EditaArquivo;
 import com.util.EditaTabela;
+import com.util.JPBotao;
 import com.util.table.JTableX;
 
 /*  JASIEL PEREIRA DE SANT ANA
@@ -58,7 +59,7 @@ public class Main extends JDialog implements IFrame  {
 				try {
 					frame = new Main();
 					frame.setVisible(true);
-					frame.setTitle("");
+					frame.setTitle(NULO);
 					frame.setResizable(true);
 				 	frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					 
@@ -107,7 +108,7 @@ public class Main extends JDialog implements IFrame  {
 	private JScrollPane scrollPaneTabelaItemteste;
   
 	private MainExtencaoLayout extencao;
-	private ArrayList<JButton> botoes;
+	
  
 	public Main() {
 		
@@ -133,37 +134,18 @@ public class Main extends JDialog implements IFrame  {
 		
 		this.painel3 = new JPanel();
 	 
-		this.botaoSair = new JButton(new ImageIcon((propriedades.leitor("iconesair"))));
+		this.botaoSair = new JPBotao(Color.WHITE, propriedades.leitor("iconesair"));   
 		
-		this.botaoEditarArquivo = new JButton(new ImageIcon((propriedades.leitor("iconeeditar"))));
+		this.botaoEditarArquivo =  new JPBotao(Color.WHITE, propriedades.leitor("iconeeditar"));  
 		
-		this.botaoDeletarLinha = new JButton(new ImageIcon((propriedades.leitor("iconelixeira"))));
+		this.botaoDeletarLinha =  new JPBotao(Color.WHITE, propriedades.leitor("iconelixeira"));  
 		
-		this.botaoAddNovoArquivo = new JButton(new ImageIcon((propriedades.leitor("iconeadd"))));
+		this.botaoAddNovoArquivo = new JPBotao(Color.WHITE, propriedades.leitor("iconeadd"));   
 		
-		this.botaoAddNovaLinha = new JButton(new ImageIcon((propriedades.leitor("iconeadd"))));
+		this.botaoAddNovaLinha =  new JPBotao(Color.WHITE, propriedades.leitor("iconeadd"));   
 		 
-	    this.botaoSalvarArquivo = new JButton(new ImageIcon((propriedades.leitor("iconesalve"))));
-	  
-	    this.botoes = new ArrayList<JButton>();
-		
-	    this.botoes.add(botaoAddNovaLinha);
-		
-	    this.botoes.add(botaoAddNovoArquivo);
-		
-	    this.botoes.add(botaoDeletarLinha);
-		
-	    this.botoes.add(botaoEditarArquivo);
-		
-	    this.botoes.add(botaoSair);
-		
-	    this.botoes.add(botaoSalvarArquivo);
-		
-	    this.extencao.setCorBotao(botoes, Color.WHITE);
-	    
-	    
-		
-		
+	    this.botaoSalvarArquivo =  new JPBotao(Color.WHITE, propriedades.leitor("iconesalve"));   
+  
 		this.modeloTabelaItemteste = editaTabela.setValorTabela(TABELA,NULO,true);
 		 
 		this.tabelaItemteste = new JTableX(modeloTabelaItemteste);
@@ -276,13 +258,16 @@ public class Main extends JDialog implements IFrame  {
 			public void actionPerformed(ActionEvent arg0){
 
 				id = tabelaIndice.getSelectedRow();
-				if (id == -1) {
+				if (id == -1) 
+				{
 					
 					JOptionPane.showMessageDialog(new JFrame(),
 							propriedades.leitor("msg02"),
 						    propriedades.leitor("erro"),
 						    JOptionPane.ERROR_MESSAGE);
-				} else { 
+				} 
+				else 
+				{ 
 					
 					try {
 					
@@ -300,7 +285,7 @@ public class Main extends JDialog implements IFrame  {
 						if(!editaTabela.indice(INDICE).getValueAt(i, 0).equals(nome1))
 							indice[i] = editaTabela.indice(INDICE).getValueAt(i, 0);
 						else
-							indice[i] = "";
+							indice[i] = NULO;
 					} 
 				  
 				    Editor edt = new Editor();
@@ -356,6 +341,7 @@ public class Main extends JDialog implements IFrame  {
 							 
 						}  
 					}
+					
 				} catch (IOException e) {
 				
 					e.printStackTrace();

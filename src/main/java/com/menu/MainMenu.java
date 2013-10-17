@@ -18,6 +18,7 @@ import javax.swing.border.TitledBorder;
 import com.core.Main;
 import com.inter.IFrame;
 import com.player.Player;
+import com.util.JPBotao;
 import com.variavel.Variaveis;
 
 public class MainMenu implements IFrame{
@@ -81,22 +82,14 @@ public class MainMenu implements IFrame{
 		
 		this.painel1 = new JPanel();
 		 
-		this.botaoCriaCenario = new JButton(new  ImageIcon((propriedades.leitor("iconenovo"))));
+		this.botaoCriaCenario = new JPBotao(Color.WHITE, propriedades.leitor("iconenovo")); 
 		
-		this.botaoExecCenario = new JButton(new  ImageIcon((propriedades.leitor("iconeselenium"))));
+		this.botaoExecCenario =  new JPBotao(Color.WHITE, propriedades.leitor("iconeselenium"));
 		
-		this.botaoCriaVariaveis = new JButton(new  ImageIcon((propriedades.leitor("iconememoria"))));
+		this.botaoCriaVariaveis =  new JPBotao(Color.WHITE, propriedades.leitor("iconememoria"));
 			
-		this.botaoSair = new JButton(new  ImageIcon((propriedades.leitor("iconesair"))));
-		
-		this.botaoCriaCenario.setBackground(Color.WHITE);
-
-		this.botaoExecCenario.setBackground(Color.WHITE);
-
-		this.botaoCriaVariaveis.setBackground(Color.WHITE);
-
-		this.botaoSair.setBackground(Color.WHITE);
-		 
+		this.botaoSair =  new JPBotao(Color.WHITE, propriedades.leitor("iconesair")); 
+  
 		this.extencao.parte1(frame, painel);
 		
 		this.extencao.parte2(painel, painel1);
