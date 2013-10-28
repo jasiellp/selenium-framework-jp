@@ -27,7 +27,7 @@ public class JpSelenium  extends TestCase{
 		//192.168.0.10
 		//"*googlechrome C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
 		//"*googlechrome C:\\Users\\Jasiellp\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
-		this.selenium = new ExtSelenium("localhost", 4444, "*googlechrome C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe", link);
+		this.selenium = new ExtSelenium("192.168.1.146", 4444, "*googlechrome C:\\Arquivos de programas\\Google\\Chrome\\Application\\chrome.exe", link);
 		this.selenium.start();
 		this.selenium.windowMaximize();
 		this.selenium.open(link);
