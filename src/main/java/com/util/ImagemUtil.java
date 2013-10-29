@@ -33,12 +33,22 @@ public class ImagemUtil {
 		byte[] decodedBytes = org.apache.commons.codec.binary.Base64.decodeBase64(screen);
 
 		try {
-
+			int x = 0;
+			int y = 0;
+			int Width = 0;
+			int Height = 0;
+			int corte = 0;
+			 
 			this.in = new ByteArrayInputStream(decodedBytes);
-			this.bImageFromConvert = ImageIO.read(in);
+			BufferedImage screenCapturedImage =  ImageIO.read(in);
+			x=screenCapturedImage.getMinX();
+			y=screenCapturedImage.getMinY();
+			Width=screenCapturedImage.getTileWidth();
+			Height=screenCapturedImage.getTileHeight();
+			corte = Height/18;
+			this.bImageFromConvert = screenCapturedImage.getSubimage(x, y,Width , Height-corte );
 
 		} catch (Exception E) {
-
 			return bImageFromConvert;
 		}
 		return bImageFromConvert;

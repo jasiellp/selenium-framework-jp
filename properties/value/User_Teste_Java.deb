@@ -1,0 +1,7 @@
+Abra o Link|@|java2s-->Link|@|11000
+Aguarde|@|java2s-->Link|@|3000
+Digite|@|java2s-->Campo_Pesquisa|@|JTable
+Clique|@|java2s-->Botao_P|@|null
+Aguarde|@|java2s-->Botao_Pesquisa|@|7000
+Capturar a tela|@|java2s-->IMG|@|Print da tela, após o clique de confirmação.
+Sair|@|java2s-->Link|@|null

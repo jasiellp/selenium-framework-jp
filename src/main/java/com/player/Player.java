@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -26,6 +25,7 @@ import javax.swing.table.TableColumn;
 
 import com.inter.ICombo;
 import com.inter.IFrame;
+import com.painel.print.Print;
 import com.util.CabecalhoCheckBox;
 import com.util.Chronometer;
 import com.util.EditaTabela;
@@ -76,7 +76,7 @@ public class Player extends JDialog implements IFrame{
 	private JButton botaoPrint;
 	
 	private EditaTabela editaTabela = new EditaTabela();
-	private String caminho = "C:\\Base\\teste";
+	private String caminho = "C:\\Base\\teste\\teste";
 	private String valor;
 	
 	private int tempo;
@@ -94,7 +94,8 @@ public class Player extends JDialog implements IFrame{
 	
 	private ImagemUtil image = new ImagemUtil();
 	
-	private List<Image> evidence = new ArrayList<Image>();;
+	private ArrayList<Image> evidence = new ArrayList<Image>();
+	private ArrayList<String> comentario = new ArrayList<String>();
 	
 	private SeleniumUtil sUtil = new SeleniumUtil();
 	
@@ -168,9 +169,7 @@ public class Player extends JDialog implements IFrame{
 		this.painel3.setBorder(new TitledBorder(null, NULO, TitledBorder.LEADING,TitledBorder.TOP, null, null));
 		
 		this.painel4 = new JPanel();
-		
-	
-		
+		 
 		
 		this.botaoSair = new JPBotao(Color.WHITE, propriedades.leitor("iconesair"));
 		this.botaoPlay = new JPBotao(Color.WHITE, propriedades.leitor("iconeplay"));
@@ -178,8 +177,6 @@ public class Player extends JDialog implements IFrame{
 		this.botaoStop = new JPBotao(Color.WHITE, propriedades.leitor("iconestop"));
 		this.botaoAvancar = new JPBotao(Color.WHITE,propriedades.leitor("iconeavanca"));
 		this.botaoPrint = new JPBotao(Color.WHITE, propriedades.leitor("iconeprint"));
-		
-	 
 		
 		
 		this.gl_contentpainel = extencao.parte1(contentpainel, painel);
@@ -199,10 +196,28 @@ public class Player extends JDialog implements IFrame{
 				botaoPlay.setEnabled(false);
 				botaoStop.setEnabled(true);
 				botaoPause.setEnabled(true);
+				botaoPrint.setEnabled(false);
 
 			}
 		});
 		
+		this.botaoPrint.setEnabled(false);
+		botaoPrint.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+				Print print = new Print();
+				Object screen = cls.getDeclaredMethod("testCapture").invoke(obj);
+				print.setImagem(image.decodeAndWriteScreenshot(screen.toString()));
+				print.setVisible(true);
+				} catch (IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException
+						| SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		
 		
 		this.botaoSair.addActionListener(new ActionListener() {
@@ -215,17 +230,21 @@ public class Player extends JDialog implements IFrame{
 		this.botaoPause.setEnabled(false);
 		botaoPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (indicador == 0) {
+				if (indicador == 0) 
+				{
 					setPause(true);
 
 					botaoPlay.setEnabled(false);
 					botaoStop.setEnabled(false);
 					botaoAvancar.setEnabled(true);
-
+					botaoPrint.setEnabled(true);
 					indicador = 1;
-				} else {
+				}
+				else 
+				{
 					setPause(false);
-
+					
+					botaoPrint.setEnabled(false);
 					botaoStop.setEnabled(true);
 					botaoPause.setEnabled(true);
 					botaoAvancar.setEnabled(false);
@@ -371,25 +390,22 @@ public class Player extends JDialog implements IFrame{
 						tabelaIndice.setModel(modeloTabelaIndice);
 
 						for (int i = 0; i < modeloTabelaIndice.getRowCount(); i++)
+						{
 							for (int c = 0; c < tabelaItemteste.getColumnCount(); c++)
-								colorirTabelaIndice.colorirCelula(i, c, new Color(255, 255,
-										255));
-
-						String arquivo = tabelaItemteste.getModel().getValueAt(j, 1)
-								.toString();
-
-						String[] comandos = editaTabela.getTab(TABELA, INIT_ARQUIVO
-								+ arquivo + EXTENCAO, 0);
-
-						ArrayList[] alvo = editaTabela.getAlvo(TABELA, INIT_ARQUIVO
-								+ arquivo + EXTENCAO, 1, ARQUIVOVARIAVEL, 0);
-
-						String[] alvo2 = editaTabela.getTab(TABELA, INIT_ARQUIVO
-								+ arquivo + EXTENCAO, 1);
+							{
+								colorirTabelaIndice.colorirCelula(i, c, new Color(255, 255,255));
+							}
+						}
 						
+						String arquivo = tabelaItemteste.getModel().getValueAt(j, 1).toString();
+
+						String[] comandos = editaTabela.getTab(TABELA, INIT_ARQUIVO + arquivo + EXTENCAO, 0);
+
+						ArrayList[] alvo = editaTabela.getAlvo(TABELA, INIT_ARQUIVO + arquivo + EXTENCAO, 1, ARQUIVOVARIAVEL, 0);
+
+						String[] alvo2 = editaTabela.getTab(TABELA, INIT_ARQUIVO + arquivo + EXTENCAO, 1);
 						
-						String[] massaDados = editaTabela.getTab(TABELA, INIT_ARQUIVO
-								+ arquivo + EXTENCAO, 2);
+						String[] massaDados = editaTabela.getTab(TABELA, INIT_ARQUIVO + arquivo + EXTENCAO, 2);
 
 						cls = Class.forName("com.selenium.JpSelenium");
 
@@ -409,7 +425,8 @@ public class Player extends JDialog implements IFrame{
 							while (getPause())
 								Thread.sleep(100);
 
-							if (comandos[i].equals(combo.Combo[1])) {
+							if (comandos[i].equals(combo.Combo[1])) 
+							{
 								cls.getDeclaredMethod("setUp", String.class,String.class).invoke(obj, alvo[i].get(1).toString(),massaDados[i]);
 								execucao.start();
 							}
@@ -417,18 +434,24 @@ public class Player extends JDialog implements IFrame{
 							if (comandos[i].equals(combo.Combo[2]))
 								Thread.sleep(Integer.parseInt(massaDados[i]));
 
-							if (comandos[i].equals(combo.Combo[3])) {
+							if (comandos[i].equals(combo.Combo[3])) 
+							{
 								Object screen = cls.getDeclaredMethod("testCapture").invoke(obj);
 								evidence.add(image.decodeAndWriteScreenshot(screen.toString()));
+								comentario.add(massaDados[i]);
 							}
 							
-							if(comandos[i].equals(combo.Combo[4])){
+							if(comandos[i].equals(combo.Combo[4]))
+							{
 								Object valor = cls.getDeclaredMethod("testElemento", ArrayList.class).invoke(obj, alvo[i]);
 								setExption(i, valor, alvo2[i]);
 								
 								if (!valor.toString().equals(ERRO))
+								{
 									cls.getDeclaredMethod("testClique",String.class).invoke(obj,valor.toString());
-								else {
+								}
+								else 
+								{
 									setExption(i, valor, alvo2[i]);
 									cls.getDeclaredMethod(TEARDOWN).invoke(obj);
 									execucao.stop();
@@ -436,13 +459,17 @@ public class Player extends JDialog implements IFrame{
 								}
 							}
 
-							if (comandos[i].equals(combo.Combo[5])) {
+							if (comandos[i].equals(combo.Combo[5])) 
+							{
 								Object valor = cls.getDeclaredMethod("testElemento", ArrayList.class).invoke(obj, alvo[i]);
 								setExption(i,valor,alvo2[i]);
 
 								if (!valor.toString().equals(ERRO))
+								{
 									cls.getDeclaredMethod("testDigite",String.class, String.class).invoke(obj, valor.toString(), massaDados[i]);
-								else {
+								}
+								else 
+								{
 									cls.getDeclaredMethod(TEARDOWN).invoke(obj);
 									execucao.stop();
 									break;
@@ -450,12 +477,14 @@ public class Player extends JDialog implements IFrame{
 
 							}
 
-							if (comandos[i].equals(combo.Combo[6])) {
+							if (comandos[i].equals(combo.Combo[6])) 
+							{
 								cls.getDeclaredMethod(TEARDOWN).invoke(obj);
 								execucao.stop();
 							}
 							
-							if (comandos[i].equals(combo.Combo[7])) {
+							if (comandos[i].equals(combo.Combo[7])) 
+							{
 								Object valor = cls.getDeclaredMethod("testTexto", ArrayList.class).invoke(obj , alvo[i]);
 								setExption1(i, valor);
 									
@@ -468,12 +497,15 @@ public class Player extends JDialog implements IFrame{
 
 						}
 
-						if(getExeption().contains(ERRO)){
+						if(getExeption().contains(ERRO))
+						{
 							colorirTabelaItemteste.colorirCelula(j, 0, new Color(255, 60, 21));
 							colorirTabelaItemteste.colorirCelula(j, 1, new Color(255, 60, 21));	
 							tabelaItemteste.validate();
 							modeloTabelaItemteste.fireTableDataChanged();
-						}else{
+						}
+						else
+						{
 							colorirTabelaItemteste.colorirCelula(j, 0, new Color(0, 255, 51));
 							colorirTabelaItemteste.colorirCelula(j, 1, new Color(0, 255, 51));
 							tabelaItemteste.validate();
@@ -483,8 +515,8 @@ public class Player extends JDialog implements IFrame{
 						tabelaItemteste.setValueAt(false, j, 0);
 						
 						String tempoExecucao = ":"+(int)(execucao.elapsedTime() % 60);
-
-						sUtil.gerarPDF(evidence, arquivo, NULO, getExeption(), "GoogleChrome",caminho, tempoExecucao);
+ 
+						sUtil.gerarPDF(evidence,comentario, arquivo, NULO, getExeption(), "GoogleChrome",caminho, tempoExecucao);
 
 					}
 				}
@@ -493,6 +525,7 @@ public class Player extends JDialog implements IFrame{
 				botaoStop.setEnabled(false);
 				botaoPause.setEnabled(false);
 				botaoAvancar.setEnabled(false);
+				botaoPrint.setEnabled(false);
 
 			} catch (SecurityException e) {
 				// TODO Auto-generated catch block

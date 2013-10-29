@@ -22,55 +22,70 @@ public class JpSelenium  extends TestCase{
 	private String comando;
 	
 	@Before
- 	public void setUp(String link, String timeout) throws Exception {
-		 System.out.println("massaDados[i] ===>>>"+timeout);
+ 	public void setUp(String link, String timeout) throws Exception 
+ 	{
 		//192.168.0.10
 		//"*googlechrome C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
 		//"*googlechrome C:\\Users\\Jasiellp\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
-		this.selenium = new ExtSelenium("192.168.1.146", 4444, "*googlechrome C:\\Arquivos de programas\\Google\\Chrome\\Application\\chrome.exe", link);
+		//"192.168.1.146"
+		//"*googlechrome C:\\Arquivos de programas\\Google\\Chrome\\Application\\chrome.exe"
+		
+		String navegador = "*googlechrome C:\\Arquivos de programas\\Google\\Chrome\\Application\\chrome.exe";
+		this.selenium = new ExtSelenium("192.168.1.146", 4444, navegador , link);
 		this.selenium.start();
 		this.selenium.windowMaximize();
 		this.selenium.open(link);
+		//Thread.sleep(Integer.parseInt(timeout));
 		this.selenium.waitForPageToLoad(timeout);
+		System.out.println("Prompt -->> "+this.selenium.isPromptPresent());
 		this.sUtil = new SeleniumUtil(); 
 		this.img = new ImagemUtil();
 	}
 
-	public Selenium getSelenium(){
+	public Selenium getSelenium()
+	{
 		return this.selenium;
 	} 
 	
 	
 	@Test
-	public void testClique(String caminho) throws Exception {
+	public void testClique(String caminho) throws Exception 
+	{
 		this.selenium.click(caminho);
 	}
 
 	@Test
-	public void testDigite(String caminho,String valor) throws Exception {
+	public void testDigite(String caminho,String valor) throws Exception 
+	{
 		this.selenium.type(caminho , valor);
 	}
 	 
 	@Test
-	public String testCapture() throws Exception {
+	public String testCapture() throws Exception 
+	{
 		return this.selenium.captureScreenshotToString();
 	}
 	 
-	public void setComando(String comando){
+	public void setComando(String comando)
+	{
 		 this.comando = comando;
 	}
 	
-	public String getComando(){ 
+	public String getComando()
+	{ 
 		return comando;
 	} 
+	
 	@Test
-	public String testElemento(ArrayList<Object> elementos) throws Exception {
+	public String testElemento(ArrayList<Object> elementos) throws Exception 
+	{
 		return this.elementoPresente(this.selenium, elementos);
 	}
 	
 	
 	@Test
-	public String testTexto(ArrayList<Object> elementos) throws Exception {
+	public String testTexto(ArrayList<Object> elementos) throws Exception 
+	{
 		return this.textoPresente(this.selenium, elementos);
 	}
 	
@@ -78,23 +93,31 @@ public class JpSelenium  extends TestCase{
 		String elemento = "OK";
 
 		for (int i = 1; i < elementos.size(); i++) 
+		{
 			if (!selenium.isTextPresent(elementos.get(i).toString()))
+			{
 					elemento = elementos.get(i).toString();
+			}
 			
-		 
+		}
 		return elemento;
 	}
 	
 	
 	public String elementoPresente(Selenium selenium, ArrayList<Object> elementos) {
+	
 		String elemento = null;
 
-		for (int i = 0; i < elementos.size(); i++) {
-			if (selenium.isElementPresent(elementos.get(i).toString())) {
+		for (int i = 0; i < elementos.size(); i++) 
+		{
+			if (selenium.isElementPresent(elementos.get(i).toString())) 
+			{
 				elemento = elementos.get(i).toString();
 				this.setComando("OK");
 				break;
-			}else{
+			}
+			else
+			{
 				this.setComando("Erro");
 				elemento = "Erro";
 			}
@@ -103,10 +126,10 @@ public class JpSelenium  extends TestCase{
 	}
 	
 	@After
-	public void tearDown() { 
+	public void tearDown() 
+	{ 
 		this.selenium.close();
 		this.selenium.stop();
-	 
 	}
  
 }
