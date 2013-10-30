@@ -148,7 +148,7 @@ public class PlayerExtencaoLayout {
 		return this.gl_painel ;		
 	}
 
-	public GroupLayout parte4(JPanel painel4, JButton botaoPlay, JButton botaoPause, JButton botaoStop, JButton botaoAvancar, JButton botaoPrint){
+	public GroupLayout parte4(JPanel painel4, JButton botaoPlay, JButton botaoPause, JButton botaoStop, JButton botaoAvancar, JButton botaoPrint, JButton botaoLimpar ){
 		this.gl_painel4 = new GroupLayout(painel4);
 		gl_painel4.setHorizontalGroup(gl_painel4.createParallelGroup(
 				Alignment.TRAILING).addGroup(
@@ -168,6 +168,9 @@ public class PlayerExtencaoLayout {
 						.addComponent(botaoAvancar, GroupLayout.PREFERRED_SIZE, 60,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(72)
+						.addComponent(botaoLimpar, GroupLayout.PREFERRED_SIZE, 60,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(66)
 						.addComponent(botaoPrint, GroupLayout.PREFERRED_SIZE, 62,
 								GroupLayout.PREFERRED_SIZE).addContainerGap()));
 		gl_painel4
@@ -198,6 +201,11 @@ public class PlayerExtencaoLayout {
 																GroupLayout.PREFERRED_SIZE)
 														.addComponent(
 																botaoPrint,
+																GroupLayout.PREFERRED_SIZE,
+																50,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(
+																botaoLimpar,
 																GroupLayout.PREFERRED_SIZE,
 																50,
 																GroupLayout.PREFERRED_SIZE)

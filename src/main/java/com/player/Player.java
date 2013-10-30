@@ -74,7 +74,8 @@ public class Player extends JDialog implements IFrame{
 	private JButton botaoStop;
 	private JButton botaoAvancar;
 	private JButton botaoPrint;
-	
+	private JButton botaoLimpar;
+	 
 	private EditaTabela editaTabela = new EditaTabela();
 	private String caminho = "C:\\Base\\teste\\teste";
 	private String valor;
@@ -177,7 +178,7 @@ public class Player extends JDialog implements IFrame{
 		this.botaoStop = new JPBotao(Color.WHITE, propriedades.leitor("iconestop"));
 		this.botaoAvancar = new JPBotao(Color.WHITE,propriedades.leitor("iconeavanca"));
 		this.botaoPrint = new JPBotao(Color.WHITE, propriedades.leitor("iconeprint"));
-		
+		this.botaoLimpar =  new JPBotao(Color.WHITE, propriedades.leitor("iconelimpar"));
 		
 		this.gl_contentpainel = extencao.parte1(contentpainel, painel);
 		
@@ -204,12 +205,17 @@ public class Player extends JDialog implements IFrame{
 		this.botaoPrint.setEnabled(false);
 		botaoPrint.addActionListener(new ActionListener() {
 
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-				Print print = new Print();
+				
 				Object screen = cls.getDeclaredMethod("testCapture").invoke(obj);
-				print.setImagem(image.decodeAndWriteScreenshot(screen.toString()));
+			 
+				Print print = new Print(image.decodeAndWriteScreenshot(screen.toString()));
+				print.setSize(600,400);
+				print.setLocation(200,200);
 				print.setVisible(true);
+				
 				} catch (IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException | NoSuchMethodException
 						| SecurityException e) {
@@ -272,9 +278,23 @@ public class Player extends JDialog implements IFrame{
 			}
 		});
 		
+		
+		botaoLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				for (int i = 0; i < modeloTabelaIndice.getRowCount(); i++) {
+					for (int j = 0; j < tabelaItemteste.getColumnCount(); j++) {
+						colorirTabelaIndice.colorirCelula(i, j,
+								new Color(255, 255, 255));
+					}
+				}
+				
+			}
+		});
+		
 
 		
-		this.gl_painel4 = extencao.parte4(painel4, botaoPlay, botaoPause, botaoStop, botaoAvancar, botaoPrint);
+		this.gl_painel4 = extencao.parte4(painel4, botaoPlay, botaoPause, botaoStop, botaoAvancar, botaoPrint, botaoLimpar );
 	 
 		this.gl_painel1 = extencao.parte6(painel1, scrollPaneTabelaIndice);
 	
@@ -296,12 +316,6 @@ public class Player extends JDialog implements IFrame{
 							false);
 					tabelaIndice.setModel(modeloTabelaIndice);
 
-					for (int i = 0; i < modeloTabelaIndice.getRowCount(); i++) {
-						for (int j = 0; j < tabelaItemteste.getColumnCount(); j++) {
-							colorirTabelaIndice.colorirCelula(i, j,
-									new Color(255, 255, 255));
-						}
-					}
 
 				}
 			}

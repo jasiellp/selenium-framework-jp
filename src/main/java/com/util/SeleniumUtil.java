@@ -134,7 +134,7 @@ public class SeleniumUtil implements IFrame{
 				}
 				this.evid = Image.getInstance(evidence.get(i), null);
 				this.evid.setAbsolutePosition(70, 400);
-				this.cb.addImage(this.evid, 450, 0, 0, 300, 70, 430);
+				this.cb.addImage(this.evid, 450, 0, 0, 300, 70, 405);
 			}
 
 			} catch (Exception e) { 
